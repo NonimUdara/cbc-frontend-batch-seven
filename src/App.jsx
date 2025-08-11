@@ -38,6 +38,14 @@ function App() {
             Hello World...?
           </h1>
         </div>
+        <div className='w-[300px] h-[300px] top-[10px] left-[10px] bg-yellow-300 p-[40px] m-[20px]'>
+          <div className='w-[100px] h-[100px] bg-red-500 m-[10px]'>
+
+          </div>
+          <div className='w-[100px] h-[100px] bg-blue-500'>
+
+          </div>
+        </div>
 
       </div>
     </>
