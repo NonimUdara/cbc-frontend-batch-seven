@@ -1,4 +1,5 @@
-import ProductCard from './components/productCard'
+import ProductCard from './components/productCard';
+import { BrowserRouter } from 'react-router-dom';
 import './App.css'
 
 function App() {
@@ -8,8 +9,8 @@ function App() {
       {/* <h1 className='text-[#becbdb] text-[100px]'>Nonim Udara</h1>
       <ProductCard name="Apple iPad" price="$1299" image="https://www.apple.com/assets-www/en_WW/ipad/product_tile/medium/ipad_pro_e6b913694_2x.png" />
       <ProductCard name="Apple iPhone" price="$899" image="https://www.apple.com/assets-www/en_WW/ipad/product_tile/medium/ipad_pro_e6b913694_2x.png"/> */}
-      <div className='h-[700px] w-[700px] relative border-[5px] flex justify-center items-center '>
-        {/* <div className='w-[600px] h-[600px] bg-yellow-300 flex flex-row justify-center items-center'>
+      {/* <div className='h-[700px] w-[700px] relative border-[5px] flex justify-center items-center '> */}
+      {/* <div className='w-[600px] h-[600px] bg-yellow-300 flex flex-row justify-center items-center'>
           <div className='w-[100px] h-[100px] bg-red-500'>
 
           </div>
@@ -27,7 +28,7 @@ function App() {
           </div>
         </div> */}
 
-        <div className='w-[300px] h-[300px] relative bg-blue-300 flex flex-row justify-center items-center'>
+      {/* <div className='w-[300px] h-[300px] relative bg-blue-300 flex flex-row justify-center items-center'>
           <button className='bg-red-500 absolute top-[5px] right-[5px] text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300'>
             x
           </button>
@@ -47,7 +48,12 @@ function App() {
           </div>
         </div>
 
-      </div>
+      </div> */}
+      <BrowserRouter>
+        <div className="w-full h-100vh ">
+          
+        </div>
+      </BrowserRouter>
     </>
   )
 }
