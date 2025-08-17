@@ -1,8 +1,9 @@
-import ProductCard from './components/productCard';
+import ProductCard from './pages/productCard';
 import { BrowserRouter } from 'react-router-dom';
 import { Routes } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import './App.css'
+import AdminPage from './components/adminPage';
 
 function App() {
 
@@ -56,7 +57,7 @@ function App() {
           <Routes path="/">
             <Route path="/" element={<h1>Home Page</h1>} />
             <Route path="/register" element={<h1>Register</h1>} />
-            <Route path="/admin" element={<h1>Admin</h1>} />
+            <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </div>
       </BrowserRouter>
