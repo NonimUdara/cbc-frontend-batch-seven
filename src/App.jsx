@@ -1,5 +1,7 @@
 import ProductCard from './components/productCard';
 import { BrowserRouter } from 'react-router-dom';
+import { Routes } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import './App.css'
 
 function App() {
@@ -50,8 +52,12 @@ function App() {
 
       </div> */}
       <BrowserRouter>
-        <div className="w-full h-100vh ">
-          
+        <div className="w-full h-[100vh] bg-amber-400 ">
+          <Routes path="/">
+            <Route path="/" element={<h1>Home Page</h1>} />
+            <Route path="/register" element={<h1>Register</h1>} />
+            <Route path="/admin" element={<h1>Admin</h1>} />
+          </Routes>
         </div>
       </BrowserRouter>
     </>
