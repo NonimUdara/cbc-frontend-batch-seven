@@ -1,12 +1,19 @@
+import { Routes } from "react-router-dom";
+import { Route } from "react-router-dom";
+
 export default function AdminPage() {
-  return (
-    <div className="bg-blue-400 w-full h-full flex p-2">
-        <div className="w-[300px] h-full bg-blue-400" >
+    return (
+        <div className="bg-primary w-full h-full flex p-2">
+            <div className="w-[300px] h-full bg-primary" >
 
+            </div>
+            <div className="w-[calc(100%-300px)] h-full bg-primary border-[2px] border-accent rounded-[20px]" >
+                <Routes path="/" >
+                    <Route path="/" element={<h1 className="text-white text-2xl">Admin Dashboard</h1>} />
+                    <Route path="/products" element={<h1>Products</h1>} />
+                    <Route path="/orders" element={<h1>Orders</h1>} />
+                </Routes>
+            </div>
         </div>
-        <div className="w-[calc(100%-300px)] h-full bg-green-500 rounded-[20px]" >
-
-        </div>
-    </div>
-  );
+    );
 }
