@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   async function login() {
     try{
@@ -16,9 +18,9 @@ export default function LoginPage() {
     );
     const user = response.data.user;
     if(user.role === "admin") {
-      window.location.href = "/admin";
+      navigate("/admin");
     } else {
-        window.location.href = "/";
+        navigate("/");
     }
     }catch(e){
         console.error("Login failed:", e);
