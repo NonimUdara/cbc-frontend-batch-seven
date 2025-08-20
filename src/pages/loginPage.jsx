@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
@@ -17,6 +18,7 @@ export default function LoginPage() {
       }
     );
     localStorage.setItem("token", response.data.token);
+    toast.success("Login successful!");
     const user = response.data.user;
     if(user.role === "admin") {
       navigate("/admin");
@@ -25,6 +27,8 @@ export default function LoginPage() {
     }
     }catch(e){
         console.error("Login failed:", e);
+        //alert("Login failed. Please check your credentials and try again.");
+        toast.error("Login failed. Please check your credentials and try again.");
     }
   }
 
