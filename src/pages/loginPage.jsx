@@ -7,7 +7,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
 
     async function login() {
-        const response = await axios.post(import.meta.env.VITE_API_URI+"/users/login", {
+        const response = await axios.post(import.meta.env.VITE_API_URI+"/api/users/login", {
             email: email,
             password: password
         })
