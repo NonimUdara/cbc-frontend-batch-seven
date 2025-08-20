@@ -6,6 +6,7 @@ import './App.css'
 import AdminPage from './components/adminPage';
 import HomePage from './pages/homePage';
 import TestPage from './pages/test';
+import LoginPage from './pages/loginPage';
 
 function App() {
 
@@ -59,6 +60,7 @@ function App() {
           <Routes path="/">
             <Route path="/*" element={<HomePage />} />
             <Route path="/register" element={<h1>Register</h1>} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/admin/*" element={<AdminPage />} />
             <Route path="/test" element={<TestPage />}></Route>
           </Routes>
