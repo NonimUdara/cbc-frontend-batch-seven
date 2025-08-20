@@ -5,6 +5,7 @@ import { Route } from 'react-router-dom';
 import './App.css'
 import AdminPage from './components/adminPage';
 import HomePage from './pages/homePage';
+import TestPage from './pages/test';
 
 function App() {
 
@@ -54,11 +55,12 @@ function App() {
 
       </div> */}
       <BrowserRouter>
-        <div className="w-full h-[100vh] bg-amber-400 ">
+        <div className="w-full h-[100vh] ">
           <Routes path="/">
             <Route path="/*" element={<HomePage />} />
             <Route path="/register" element={<h1>Register</h1>} />
             <Route path="/admin/*" element={<AdminPage />} />
+            <Route path="/test" element={<TestPage />}></Route>
           </Routes>
         </div>
       </BrowserRouter>
