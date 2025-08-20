@@ -1,6 +1,9 @@
+import React, { useState } from "react";
+
 export default function TestPage() {
 
-    let count = 10;
+    const [count, setCount] = useState(150);
+    console.log(count);
 
     return (
         <div className="w-full h-full flex justify-center items-center">
@@ -8,20 +11,18 @@ export default function TestPage() {
                 <button onClick={
                     () => {
                         console.log("Decrement button clicked");
-                        count = count - 1;
-                        console.log(count);
+                        setCount(220);
                     }
                 } className="w-[100px] bg-accent h-[40px] rounded-lg">
                     -
                 </button>
                 <span className="text-5xl text-accent">
-                    {count} c
+                    {count}
                 </span>
                 <button onClick={
                     () => {
                         console.log("Increment Button clicked");
-                        count = count + 1;
-                        console.log(count);
+                        setCount(440);
                     }
                 } className="w-[100px] bg-accent h-[40px] rounded-lg">
                     +
