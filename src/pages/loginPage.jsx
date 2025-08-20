@@ -16,6 +16,7 @@ export default function LoginPage() {
         password: password,
       }
     );
+    localStorage.setItem("token", response.data.token);
     const user = response.data.user;
     if(user.role === "admin") {
       navigate("/admin");
