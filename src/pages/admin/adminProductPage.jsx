@@ -9,8 +9,7 @@ export default function AdminProductPage() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        axios
-            .get(import.meta.env.VITE_API_URI + "/api/products")
+        axios.get(import.meta.env.VITE_API_URI + "/api/products")
             .then((response) => {
                 setProducts(response.data);
             })
@@ -22,7 +21,7 @@ export default function AdminProductPage() {
             <Link to="/admin/add-product" className="fixed right-[50px] bottom-[50px] text-5xl hover:text-accent px-4">
                 <CiCirclePlus />
             </Link>
-            <div className="w-full max-w-7xl bg-white rounded-2xl shadow-xl p-4">
+            <div className="w-full max-w-7xl h-[97%] bg-white rounded-2xl shadow-xl p-4">
                 {/* Header with count */}
                 <div className="flex items-center justify-between mb-6 border-b pb-3">
                     <h1 className="text-2xl font-bold text-secondary">Products Management</h1>
@@ -32,7 +31,7 @@ export default function AdminProductPage() {
                 </div>
 
                 {/* Table container */}
-                <div className="overflow-x-auto rounded-lg border border-gray-200">
+                <div className="overflow-auto rounded-lg border border-gray-200">
                     <table className="w-full text-left border-collapse">
                         <thead className="bg-primary sticky top-0 z-10">
                             <tr>

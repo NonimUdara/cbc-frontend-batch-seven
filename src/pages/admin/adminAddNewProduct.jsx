@@ -1,7 +1,7 @@
 export default function AdminAddnewProduct() {
     return (
         <div className="w-full h-full p-6 bg-primary min-h-screen flex justify-center">
-            <div className="w-full max-w-7xl bg-white rounded-2xl shadow-xl p-4">
+            <div className="w-full max-w-7xl h-[97%] bg-white rounded-2xl shadow-xl p-4 overflow-auto">
                 <h1 className="text-2xl font-bold text-secondary mb-6">Add New Product</h1>
                 <form className="space-y-4">
                     <div>
