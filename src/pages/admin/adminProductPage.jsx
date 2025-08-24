@@ -1,64 +1,100 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { CiCirclePlus } from "react-icons/ci";
 import { FaRegEdit } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 export default function AdminProductPage() {
-
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        axios.get(import.meta.env.VITE_API_URI + "/api/products").then(
-        (response) => {
-            console.log(response.data);
-            setProducts(response.data);
-        }
-    );
-    } , []);
-    
+        axios
+            .get(import.meta.env.VITE_API_URI + "/api/products")
+            .then((response) => {
+                setProducts(response.data);
+            })
+            .catch((error) => console.error("Error fetching products:", error));
+    }, []);
+
     return (
-        <div className="w-full h-full p-[10px]">
+        <div className="w-full h-full p-6 bg-primary min-h-screen flex justify-center">
+            <Link to="/admin/add-product" className="fixed right-[50px] bottom-[50px] text-5xl hover:text-accent px-4">
+                <CiCirclePlus />
+            </Link>
+            <div className="w-full max-w-7xl bg-white rounded-2xl shadow-xl p-4">
+                {/* Header with count */}
+                <div className="flex items-center justify-between mb-6 border-b pb-3">
+                    <h1 className="text-2xl font-bold text-secondary">Products Management</h1>
+                    <span className="text-sm text-gray-600 bg-primary px-4 py-1 rounded-full">
+                        Total: <span className="font-semibold text-secondary">{products.length}</span>
+                    </span>
+                </div>
 
-            <table className="border w-full text-center">
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Product ID</th>
-                        <th>Product Name</th>
-                        <th>Product Price</th>
-                        <th>Labled Price</th>
-                        <th>Category</th>
-                        <th>Actions</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        products.map(
-                            (item , index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td><img src={item.images[0]} className="w-16 h-16 object-cover" /></td>
-                                        <td>{item.productID}</td>
-                                        <td>{item.name}</td>
-                                        <td>{item.price}</td>
-                                        <td>{item.labledPrice}</td>
-                                        <td>{item.category}</td>
-                                        <td>
-                                            <div className="flex flex-row gap-[20px] justify-center items-center">
-                                                <IoTrashOutline className="hover:text-red-600"/>
-                                                <FaRegEdit className="hover:text-accent"/>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                );
-                            }
-                        )
-                    }
-                </tbody>
-            </table>
-
-
+                {/* Table container */}
+                <div className="overflow-x-auto rounded-lg border border-gray-200">
+                    <table className="w-full text-left border-collapse">
+                        <thead className="bg-primary sticky top-0 z-10">
+                            <tr>
+                                {[
+                                    "Image",
+                                    "Product ID",
+                                    "Product Name",
+                                    "Price",
+                                    "Labeled Price",
+                                    "Category",
+                                    "Actions",
+                                ].map((heading, index) => (
+                                    <th
+                                        key={index}
+                                        className="p-4 text-secondary font-semibold text-sm uppercase border-b"
+                                    >
+                                        {heading}
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {products.map((item, index) => (
+                                <tr
+                                    key={index}
+                                    className={`transition-colors duration-300 hover:bg-[#FEF9F4] ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                                        }`}
+                                >
+                                    <td className="p-4 border-b">
+                                        <img
+                                            src={item.images[0]}
+                                            alt={item.name}
+                                            className="w-14 h-14 rounded-md object-cover border border-gray-200 shadow-sm"
+                                        />
+                                    </td>
+                                    <td className="p-4 border-b text-gray-700 text-sm">{item.productID}</td>
+                                    <td className="p-4 border-b text-gray-800 font-medium">{item.name}</td>
+                                    <td className="p-4 border-b text-gray-700 text-sm">${item.price}</td>
+                                    <td className="p-4 border-b text-gray-700 text-sm">${item.labledPrice}</td>
+                                    <td className="p-4 border-b text-gray-700 text-sm">{item.category}</td>
+                                    <td className="p-4 border-b">
+                                        <div className="flex gap-3 justify-center">
+                                            <button
+                                                className="p-2 rounded-full hover:bg-red-50 text-gray-600 hover:text-red-600 transition"
+                                                title="Delete"
+                                            >
+                                                <IoTrashOutline size={18} />
+                                            </button>
+                                            <button
+                                                className="p-2 rounded-full hover:bg-primary text-gray-600 hover:text-accent transition"
+                                                title="Edit"
+                                            >
+                                                <FaRegEdit size={18} />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 }
