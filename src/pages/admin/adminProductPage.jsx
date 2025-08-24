@@ -1,18 +1,21 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FaRegEdit } from "react-icons/fa";
+import { IoTrashOutline } from "react-icons/io5";
 
 export default function AdminProductPage() {
 
     const [products, setProducts] = useState([]);
 
-    axios.get(import.meta.env.VITE_API_URI + "/api/products").then(
+    useEffect(() => {
+        axios.get(import.meta.env.VITE_API_URI + "/api/products").then(
         (response) => {
             console.log(response.data);
             setProducts(response.data);
         }
     );
-    console.log(products);
-
+    } , []);
+    
     return (
         <div className="w-full h-full p-[10px]">
 
@@ -25,6 +28,7 @@ export default function AdminProductPage() {
                         <th>Product Price</th>
                         <th>Labled Price</th>
                         <th>Category</th>
+                        <th>Actions</th>
 
                     </tr>
                 </thead>
@@ -40,6 +44,12 @@ export default function AdminProductPage() {
                                         <td>{item.price}</td>
                                         <td>{item.labledPrice}</td>
                                         <td>{item.category}</td>
+                                        <td>
+                                            <div className="flex flex-row gap-[20px] justify-center items-center">
+                                                <IoTrashOutline className="hover:text-red-600"/>
+                                                <FaRegEdit className="hover:text-accent"/>
+                                            </div>
+                                        </td>
                                     </tr>
                                 );
                             }
