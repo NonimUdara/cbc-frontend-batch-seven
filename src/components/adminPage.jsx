@@ -5,6 +5,7 @@ import { FaChartLine } from "react-icons/fa";
 import { MdShoppingCartCheckout } from "react-icons/md";
 import { BsBox2Heart } from "react-icons/bs";
 import { PiUsersThreeLight } from "react-icons/pi";
+import AdminProductPage from "../pages/admin/adminProductPage";
 
 export default function AdminPage() {
     return (
@@ -35,7 +36,7 @@ export default function AdminPage() {
                 <div className="w-full max-w-full h-full max-h-full overflow-y-scroll ">
                     <Routes path="/" >
                         <Route path="/" element={<h1>Dashboard</h1>} />
-                        <Route path="/products" element={<h1>Products</h1>} />
+                        <Route path="/products" element={<AdminProductPage />} />
                         <Route path="/orders" element={<h1>Orders</h1>} />
                     </Routes>
                 </div>
