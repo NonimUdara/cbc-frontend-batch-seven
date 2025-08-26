@@ -9,7 +9,7 @@ export default function AdminProductPage() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        axios.get(import.meta.env.VITE_API_URI + "/api/products")
+        axios.get(import.meta.env.VITE_API_URL + "/api/products")
             .then((response) => {
                 setProducts(response.data);
             })
