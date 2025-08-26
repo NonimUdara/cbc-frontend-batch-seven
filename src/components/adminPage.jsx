@@ -12,9 +12,11 @@ export default function AdminPage() {
     return (
         <div className="bg-primary w-full h-full flex p-2 text-secondary">
             <div className="w-[300px] h-full flex flex-col bg-primary items-center gap-[20px]" >
-                <div className="flex flex-row w-[90%] h-[70px] bg-accent items-center rounded-2xl mb-[20px]">
-                    <img src="/logo.png" alt="CBC - Crystal Beauty Clear" className="h-[100px]" />
-                    <span className="text-white text-xl ml-4">Admin </span>
+                <div className="flex flex-col w-[85%] h-[100px] bg-accent items-center rounded-2xl mb-[20px]">
+                    <span className="text-white text-xl font-bold ml-4 p-4">Admin Dashboard </span>
+                    <div className="w-full h-full flex justify-center items-center ">
+                        <img src="/logo.png" alt="CBC - Crystal Beauty Clear" className="h-[110px] mb-20" />
+                    </div>
                 </div>
                 <Link to="/admin" className="w-[90%] flex items-center gap-2 px-4 rounded-lg">
                     <FaChartLine className="text-xl" />
@@ -29,7 +31,7 @@ export default function AdminPage() {
                     Products
                 </Link>
                 <Link to="/admin/users" className="w-[90%] flex items-center gap-2 px-4 rounded-lg">
-                    <PiUsersThreeLight  className="text-xl" />
+                    <PiUsersThreeLight className="text-xl" />
                     Users
                 </Link>
             </div>

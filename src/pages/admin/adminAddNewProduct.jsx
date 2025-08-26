@@ -13,8 +13,8 @@ export default function AdminAddnewProduct() {
 
   return (
     <div className="w-full min-h-screen flex justify-center items-center bg-primary p-6">
-      <div className="w-full max-w-2xl bg-white shadow-2xl rounded-2xl p-8 border border-accent">
-        <h2 className="text-3xl font-bold text-secondary mb-6 text-center">
+      <div className="w-full max-w-2xl bg-white shadow-2xl rounded-2xl p-8 border border-accent relative">
+        <h2 className="text-3xl font-bold text-secondary mb-6 text-left">
           Add New Product
         </h2>
 
@@ -128,10 +128,19 @@ export default function AdminAddnewProduct() {
           </div>
         </div>
 
-        {/* Submit Button */}
-        <div className="mt-8 flex justify-center">
-          <button className="bg-accent text-white font-semibold px-8 py-3 rounded-lg hover:bg-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl">
-            Add Product
+        {/* Buttons Section */}
+        <div className="mt-10 flex justify-end gap-4">
+          <button
+            type="button"
+            className="bg-gray-300 text-secondary font-semibold px-6 py-3 rounded-lg hover:bg-gray-400 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 hover:border-[2px] hover:border-secondary"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="bg-accent text-white font-semibold px-8 py-3 rounded-lg hover:bg-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 hover:border-[2px] hover:border-secondary"
+          >
+            Submit
           </button>
         </div>
       </div>
