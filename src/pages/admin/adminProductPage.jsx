@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { CiCirclePlus } from "react-icons/ci";
 import { FaRegEdit } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function AdminProductPage() {
+
     const [products, setProducts] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(import.meta.env.VITE_API_URL + "/api/products")
@@ -42,6 +44,7 @@ export default function AdminProductPage() {
                                     "Price",
                                     "Labeled Price",
                                     "Category",
+                                    "Stock",
                                     "Actions",
                                 ].map((heading, index) => (
                                     <th
@@ -72,6 +75,7 @@ export default function AdminProductPage() {
                                     <td className="p-4 border-b text-gray-700 text-sm">${item.price}</td>
                                     <td className="p-4 border-b text-gray-700 text-sm">${item.labledPrice}</td>
                                     <td className="p-4 border-b text-gray-700 text-sm">{item.category}</td>
+                                    <td className="p-4 border-b text-gray-700 text-sm">{item.stock}</td>
                                     <td className="p-4 border-b">
                                         <div className="flex gap-3 justify-center">
                                             <button
@@ -83,6 +87,13 @@ export default function AdminProductPage() {
                                             <button
                                                 className="p-2 rounded-full hover:bg-primary text-gray-600 hover:text-accent transition"
                                                 title="Edit"
+                                                onClick={
+                                                    () => navigate("/admin/update-product", 
+                                                        { 
+                                                            state: item
+                                                        }
+                                                    )
+                                                }
                                             >
                                                 <FaRegEdit size={18} />
                                             </button>

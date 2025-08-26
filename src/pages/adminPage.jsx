@@ -5,8 +5,10 @@ import { FaChartLine } from "react-icons/fa";
 import { MdShoppingCartCheckout } from "react-icons/md";
 import { BsBox2Heart } from "react-icons/bs";
 import { PiUsersThreeLight } from "react-icons/pi";
-import AdminProductPage from "../pages/admin/adminProductPage";
-import AdminAddnewProduct from "../pages/admin/adminAddnewProduct";
+import AdminProductPage from "./admin/adminProductPage";
+import AdminAddnewProduct from "./admin/adminAddnewProduct";
+import AdminUpdateProduct from "./admin/adminUpdateProduct";
+
 
 export default function AdminPage() {
     return (
@@ -42,6 +44,7 @@ export default function AdminPage() {
                         <Route path="/products" element={<AdminProductPage />} />
                         <Route path="/orders" element={<h1>Orders</h1>} />
                         <Route path="/add-product" element={<AdminAddnewProduct />} />
+                        <Route path="/update-product" element={<AdminUpdateProduct />} />
                     </Routes>
                 </div>
             </div>

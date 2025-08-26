@@ -1,23 +1,27 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import mediaUpload from "../../utils/mediaUpload";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-export default function AdminAddnewProduct() {
-    const [productID, setProductID] = useState("");
-    const [name, setName] = useState("");
-    const [altNames, setAltNames] = useState("");
-    const [description, setDescription] = useState("");
+export default function AdminUpdateProduct() {
+    
+    const location = useLocation();
+    console.log(location.state);
+
+    const [productID, setProductID] = useState(location.state.productID);
+    const [name, setName] = useState(location.state.name);
+    const [altNames, setAltNames] = useState(location.state.altNames.join(", "));
+    const [description, setDescription] = useState(location.state.description);
     const [images, setImages] = useState([]);
-    const [price, setPrice] = useState(0);
-    const [labledPrice, setLabledPrice] = useState(0);
-    const [category, setCategory] = useState("");
-    const [stock, setStock] = useState(0);
+    const [price, setPrice] = useState(location.state.price);
+    const [labledPrice, setLabledPrice] = useState(location.state.labledPrice);
+    const [category, setCategory] = useState(location.state.category);
+    const [stock, setStock] = useState(location.state.stock);
 
     const navigate = useNavigate();
 
-    async function addProduct() {
+    async function updateProduct() {
 
         const token = localStorage.getItem("token");
         if (token == null) {
@@ -29,13 +33,18 @@ export default function AdminAddnewProduct() {
         const promises = [];
         for (let i = 0; i < images.length; i++) {
 
-            console.log(images[i])
+            //console.log(images[i])
             promises[i] = mediaUpload(images[i]);
 
         }
 
         try {
-            const urls = await Promise.all(promises);
+            let urls = await Promise.all(promises);
+
+            if(urls.length == 0){
+                urls = location.state.images;
+            }
+
             const alternativeNames = altNames.split(",").map(name => name.trim());
 
             const product = {
@@ -50,12 +59,12 @@ export default function AdminAddnewProduct() {
                 stock: stock
             }
 
-            axios.post(import.meta.env.VITE_API_URL + "/api/products", product,{
+            axios.put(import.meta.env.VITE_API_URL + "/api/products/"+productID,product,{
                 headers: {
                     Authorization: "Bearer " + token
                 }
             }).then(() => {
-                toast.success("Product added successfully!");
+                toast.success("Product updated successfully!");
                 navigate("/admin/products");
             }).catch((e) => {
                 console.error("Error adding product:", e);
@@ -67,7 +76,6 @@ export default function AdminAddnewProduct() {
             toast.error("Error uploading images. Please try again.");
             return;
         }
-        console.log(urls);
 
     }
 
@@ -75,7 +83,7 @@ export default function AdminAddnewProduct() {
         <div className="w-full min-h-screen flex justify-center items-center bg-primary p-6">
             <div className="w-full max-w-2xl bg-white shadow-2xl rounded-2xl p-8 border border-accent relative">
                 <h2 className="text-3xl font-bold text-secondary mb-6 text-left">
-                    Add New Product
+                    Update Product
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -83,6 +91,7 @@ export default function AdminAddnewProduct() {
                     <div className="flex flex-col">
                         <label className="text-secondary font-semibold mb-2">Product ID</label>
                         <input
+                            disabled
                             placeholder="Enter unique product ID"
                             className="border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent"
                             value={productID}
@@ -201,7 +210,7 @@ export default function AdminAddnewProduct() {
                     </button>
                     <button
                         type="submit"
-                        onClick={addProduct}
+                        onClick={updateProduct}
                         className="bg-accent text-white font-semibold px-8 py-3 rounded-lg hover:bg-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 hover:border-[2px] hover:border-secondary"
                     >
                         Submit
