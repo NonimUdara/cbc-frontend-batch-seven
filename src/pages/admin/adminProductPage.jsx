@@ -6,11 +6,16 @@ import { IoTrashOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 
 function ProductDeleteConfirm(props){
+
     const productID =  props.productID;
+    const close = props.close;
+
     return(
         <div className="fixed left-0 top-0 w-full h-screen bg-[#00000050] z-[100] flex justify-center items-center">
-            <div className="w-[500px] h-[200px] bg-white rounded-lg shadow-lg p-6">
-
+            <div className="w-[500px] h-[200px] bg-white rounded-lg shadow-lg p-6 relative">
+                <button onClick={close} className="absolute right-[-40px] w-[42px] top-[-42px] h-[40px] rounded-full bg-red-600 font-bold text-white border border-red-600 hover:bg-white hover:text-red-600">
+                    X
+                </button>
             </div>
         </div>
     )
@@ -19,6 +24,7 @@ function ProductDeleteConfirm(props){
 export default function AdminProductPage() {
 
     const [products, setProducts] = useState([]);
+    const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,7 +37,9 @@ export default function AdminProductPage() {
 
     return (
         <div className="w-full h-full p-6 bg-primary min-h-screen flex justify-center">
-            <ProductDeleteConfirm />
+            {
+                isDeleteConfirmVisible && <ProductDeleteConfirm close={() => {setIsDeleteConfirmVisible(false)} } />
+            }
             <Link to="/admin/add-product" className="fixed right-[50px] bottom-[50px] text-5xl hover:text-accent px-4">
                 <CiCirclePlus />
             </Link>
@@ -94,7 +102,9 @@ export default function AdminProductPage() {
                                                 className="p-2 rounded-full hover:bg-red-50 text-gray-600 hover:text-red-600 transition"
                                                 title="Delete"
                                                 onClick={
-                                                    axios.delete(import.meta.env.VITE_API_URL + "/api/products/" +item.productID)
+                                                    () => {
+                                                        setIsDeleteConfirmVisible(true)
+                                                    }
                                                 }
                                             >
                                                 <IoTrashOutline size={18} />
