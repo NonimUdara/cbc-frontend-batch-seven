@@ -5,6 +5,17 @@ import { FaRegEdit } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 
+function ProductDeleteConfirm(props){
+    const productID =  props.productID;
+    return(
+        <div className="fixed left-0 top-0 w-full h-screen bg-[#00000050] z-[100] flex justify-center items-center">
+            <div className="w-[500px] h-[200px] bg-white rounded-lg shadow-lg p-6">
+
+            </div>
+        </div>
+    )
+}
+
 export default function AdminProductPage() {
 
     const [products, setProducts] = useState([]);
@@ -20,6 +31,7 @@ export default function AdminProductPage() {
 
     return (
         <div className="w-full h-full p-6 bg-primary min-h-screen flex justify-center">
+            <ProductDeleteConfirm />
             <Link to="/admin/add-product" className="fixed right-[50px] bottom-[50px] text-5xl hover:text-accent px-4">
                 <CiCirclePlus />
             </Link>
@@ -81,6 +93,9 @@ export default function AdminProductPage() {
                                             <button
                                                 className="p-2 rounded-full hover:bg-red-50 text-gray-600 hover:text-red-600 transition"
                                                 title="Delete"
+                                                onClick={
+                                                    axios.delete(import.meta.env.VITE_API_URL + "/api/products/" +item.productID)
+                                                }
                                             >
                                                 <IoTrashOutline size={18} />
                                             </button>
