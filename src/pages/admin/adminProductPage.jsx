@@ -1,21 +1,52 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { CiCirclePlus } from "react-icons/ci";
 import { FaRegEdit } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 
-function ProductDeleteConfirm(props){
+function ProductDeleteConfirm(props) {
 
-    const productID =  props.productID;
+    const productID = props.productID;
     const close = props.close;
+    function deleteProduct() {
 
-    return(
+        const token = localStorage.getItem("token");
+
+        axios.delete(import.meta.env.VITE_API_URL + "/api/products/" + productID, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log("Product deleted:", response.data);
+                close();
+                toast.success("Product deleted successfully");
+                // window.location.reload();
+            })
+            .catch(() => {
+                toast.error("Error deleting product");
+            });
+    }
+
+    return (
         <div className="fixed left-0 top-0 w-full h-screen bg-[#00000050] z-[100] flex justify-center items-center">
-            <div className="w-[500px] h-[200px] bg-white rounded-lg shadow-lg p-6 relative">
+            <div className="w-[500px] h-[200px] bg-primary rounded-lg shadow-lg p-6 relative flex flex-col justify-center items-center gap-[10px">
                 <button onClick={close} className="absolute right-[-40px] w-[42px] top-[-42px] h-[40px] rounded-full bg-red-600 font-bold text-white border border-red-600 hover:bg-white hover:text-red-600">
                     X
                 </button>
+                <p className="text-xl font-semibold">
+                    Are you sure you want to delete product {productID} ?
+                    <div className="flex gap-6 justify-center mt-6">
+                        <button onClick={deleteProduct} className="w-[100px] bg-red-600 p-[5px] text-white hover:bg-accent hover:text-black  ">
+                            Delete
+                        </button>
+                        <button onClick={close} className="w-[100px] bg-blue-600 p-[5px] text-white hover:bg-accent hover:text-black ">
+                            Cancel
+                        </button>
+                    </div>
+                </p>
             </div>
         </div>
     )
@@ -25,20 +56,30 @@ export default function AdminProductPage() {
 
     const [products, setProducts] = useState([]);
     const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
+    const [productToDelete, setProductToDelete] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(import.meta.env.VITE_API_URL + "/api/products")
+        if (isLoading)
+        {
+           axios.get(import.meta.env.VITE_API_URL + "/api/products")
             .then((response) => {
+                console.log("Products fetched:", response.data);
                 setProducts(response.data);
+                setIsLoading(false);
             })
-            .catch((error) => console.error("Error fetching products:", error));
-    }, []);
+            .catch((error) => console.error("Error fetching products:", error)); 
+        }
+        
+    }, [isLoading]);
 
     return (
         <div className="w-full h-full p-6 bg-primary min-h-screen flex justify-center">
             {
-                isDeleteConfirmVisible && <ProductDeleteConfirm close={() => {setIsDeleteConfirmVisible(false)} } />
+                // if isDeleteConfirmVisible is true, show the ProductDeleteConfirm component
+                isDeleteConfirmVisible && <ProductDeleteConfirm productID={productToDelete} close={() => { setIsDeleteConfirmVisible(false) }} />
             }
             <Link to="/admin/add-product" className="fixed right-[50px] bottom-[50px] text-5xl hover:text-accent px-4">
                 <CiCirclePlus />
@@ -54,80 +95,84 @@ export default function AdminProductPage() {
 
                 {/* Table container */}
                 <div className="overflow-auto rounded-lg border border-gray-200">
-                    <table className="w-full text-left border-collapse">
-                        <thead className="bg-primary sticky top-0 z-10">
-                            <tr>
-                                {[
-                                    "Image",
-                                    "Product ID",
-                                    "Product Name",
-                                    "Price",
-                                    "Labeled Price",
-                                    "Category",
-                                    "Stock",
-                                    "Actions",
-                                ].map((heading, index) => (
-                                    <th
-                                        key={index}
-                                        className="p-4 text-secondary font-semibold text-sm uppercase border-b"
-                                    >
-                                        {heading}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {products.map((item, index) => (
-                                <tr
-                                    key={index}
-                                    className={`transition-colors duration-300 hover:bg-[#FEF9F4] ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                                        }`}
-                                >
-                                    <td className="p-4 border-b">
-                                        <img
-                                            src={item.images[0]}
-                                            alt={item.name}
-                                            className="w-14 h-14 rounded-md object-cover border border-gray-200 shadow-sm"
-                                        />
-                                    </td>
-                                    <td className="p-4 border-b text-gray-700 text-sm">{item.productID}</td>
-                                    <td className="p-4 border-b text-gray-800 font-medium">{item.name}</td>
-                                    <td className="p-4 border-b text-gray-700 text-sm">${item.price}</td>
-                                    <td className="p-4 border-b text-gray-700 text-sm">${item.labledPrice}</td>
-                                    <td className="p-4 border-b text-gray-700 text-sm">{item.category}</td>
-                                    <td className="p-4 border-b text-gray-700 text-sm">{item.stock}</td>
-                                    <td className="p-4 border-b">
-                                        <div className="flex gap-3 justify-center">
-                                            <button
-                                                className="p-2 rounded-full hover:bg-red-50 text-gray-600 hover:text-red-600 transition"
-                                                title="Delete"
-                                                onClick={
-                                                    () => {
-                                                        setIsDeleteConfirmVisible(true)
-                                                    }
-                                                }
+                    {
+                        isLoading ? <p>Loading</p> :
+                            <table className="w-full text-left border-collapse">
+                                <thead className="bg-primary sticky top-0 z-10">
+                                    <tr>
+                                        {[
+                                            "Image",
+                                            "Product ID",
+                                            "Product Name",
+                                            "Price",
+                                            "Labeled Price",
+                                            "Category",
+                                            "Stock",
+                                            "Actions",
+                                        ].map((heading, index) => (
+                                            <th
+                                                key={index}
+                                                className="p-4 text-secondary font-semibold text-sm uppercase border-b"
                                             >
-                                                <IoTrashOutline size={18} />
-                                            </button>
-                                            <button
-                                                className="p-2 rounded-full hover:bg-primary text-gray-600 hover:text-accent transition"
-                                                title="Edit"
-                                                onClick={
-                                                    () => navigate("/admin/update-product", 
-                                                        { 
-                                                            state: item
+                                                {heading}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {products.map((item, index) => (
+                                        <tr
+                                            key={index}
+                                            className={`transition-colors duration-300 hover:bg-[#FEF9F4] ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                                                }`}
+                                        >
+                                            <td className="p-4 border-b">
+                                                <img
+                                                    src={item.images[0]}
+                                                    alt={item.name}
+                                                    className="w-14 h-14 rounded-md object-cover border border-gray-200 shadow-sm"
+                                                />
+                                            </td>
+                                            <td className="p-4 border-b text-gray-700 text-sm">{item.productID}</td>
+                                            <td className="p-4 border-b text-gray-800 font-medium">{item.name}</td>
+                                            <td className="p-4 border-b text-gray-700 text-sm">${item.price}</td>
+                                            <td className="p-4 border-b text-gray-700 text-sm">${item.labledPrice}</td>
+                                            <td className="p-4 border-b text-gray-700 text-sm">{item.category}</td>
+                                            <td className="p-4 border-b text-gray-700 text-sm">{item.stock}</td>
+                                            <td className="p-4 border-b">
+                                                <div className="flex gap-3 justify-center">
+                                                    <button
+                                                        className="p-2 rounded-full hover:bg-red-50 text-gray-600 hover:text-red-600 transition"
+                                                        title="Delete"
+                                                        onClick={
+                                                            () => {
+                                                                setProductToDelete(item.productID);
+                                                                setIsDeleteConfirmVisible(true)
+                                                            }
                                                         }
-                                                    )
-                                                }
-                                            >
-                                                <FaRegEdit size={18} />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                                    >
+                                                        <IoTrashOutline size={18} />
+                                                    </button>
+                                                    <button
+                                                        className="p-2 rounded-full hover:bg-primary text-gray-600 hover:text-accent transition"
+                                                        title="Edit"
+                                                        onClick={
+                                                            () => navigate("/admin/update-product",
+                                                                {
+                                                                    state: item
+                                                                }
+                                                            )
+                                                        }
+                                                    >
+                                                        <FaRegEdit size={18} />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                    }
                 </div>
             </div>
         </div>
