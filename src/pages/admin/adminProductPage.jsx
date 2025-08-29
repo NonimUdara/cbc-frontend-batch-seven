@@ -5,11 +5,13 @@ import { CiCirclePlus } from "react-icons/ci";
 import { FaRegEdit } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
+import { Loader } from "../../components/loader";
 
 function ProductDeleteConfirm(props) {
 
     const productID = props.productID;
     const close = props.close;
+    const refresh = props.refresh;
     function deleteProduct() {
 
         const token = localStorage.getItem("token");
@@ -23,6 +25,7 @@ function ProductDeleteConfirm(props) {
                 console.log("Product deleted:", response.data);
                 close();
                 toast.success("Product deleted successfully");
+                refresh();
                 // window.location.reload();
             })
             .catch(() => {
@@ -79,7 +82,7 @@ export default function AdminProductPage() {
         <div className="w-full h-full p-6 bg-primary min-h-screen flex justify-center">
             {
                 // if isDeleteConfirmVisible is true, show the ProductDeleteConfirm component
-                isDeleteConfirmVisible && <ProductDeleteConfirm productID={productToDelete} close={() => { setIsDeleteConfirmVisible(false) }} />
+                isDeleteConfirmVisible && <ProductDeleteConfirm refresh={() => {setIsLoading(true)} } productID={productToDelete} close={() => { setIsDeleteConfirmVisible(false) }} />
             }
             <Link to="/admin/add-product" className="fixed right-[50px] bottom-[50px] text-5xl hover:text-accent px-4">
                 <CiCirclePlus />
@@ -96,7 +99,7 @@ export default function AdminProductPage() {
                 {/* Table container */}
                 <div className="overflow-auto rounded-lg border border-gray-200">
                     {
-                        isLoading ? <p>Loading</p> :
+                        isLoading ? <p><Loader /></p> :
                             <table className="w-full text-left border-collapse">
                                 <thead className="bg-primary sticky top-0 z-10">
                                     <tr>
