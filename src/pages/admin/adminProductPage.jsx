@@ -108,7 +108,7 @@ export default function AdminProductPage() {
                                             "Product ID",
                                             "Product Name",
                                             "Price",
-                                            "Labeled Price",
+                                            "Labled Price",
                                             "Category",
                                             "Stock",
                                             "Actions",

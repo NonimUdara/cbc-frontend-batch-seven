@@ -156,12 +156,12 @@ export default function AdminUpdateProduct() {
                         />
                     </div>
 
-                    {/* Labeled Price */}
+                    {/* Labled Price */}
                     <div className="flex flex-col">
-                        <label className="text-secondary font-semibold mb-2">Labeled Price</label>
+                        <label className="text-secondary font-semibold mb-2">Labled Price</label>
                         <input
                             type="number"
-                            placeholder="Enter labeled price"
+                            placeholder="Enter labled price"
                             className="border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent"
                             value={labledPrice}
                             onChange={(e) => setLabledPrice(e.target.value)}
