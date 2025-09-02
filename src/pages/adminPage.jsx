@@ -6,7 +6,7 @@ import { MdShoppingCartCheckout } from "react-icons/md";
 import { BsBox2Heart } from "react-icons/bs";
 import { PiUsersThreeLight } from "react-icons/pi";
 import AdminProductPage from "./admin/adminProductPage";
-import AdminAddnewProduct from "./admin/adminAddnewProduct";
+import AdminAddnewProduct from "./admin/adminAddNewProduct";
 import AdminUpdateProduct from "./admin/adminUpdateProduct";
 
 
