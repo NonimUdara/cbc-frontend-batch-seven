@@ -43,48 +43,6 @@ export default function ProductPage () {
                             )
                         })
                     }
-                    {
-                        products.map((item) => {
-                            return(
-                              <ProductCard product={item} key={item.productID} />
-                            )
-                        })
-                    }
-                    {
-                        products.map((item) => {
-                            return(
-                              <ProductCard product={item} key={item.productID} />
-                            )
-                        })
-                    }
-                    {
-                        products.map((item) => {
-                            return(
-                              <ProductCard product={item} key={item.productID} />
-                            )
-                        })
-                    }
-                    {
-                        products.map((item) => {
-                            return(
-                              <ProductCard product={item} key={item.productID} />
-                            )
-                        })
-                    }
-                    {
-                        products.map((item) => {
-                            return(
-                              <ProductCard product={item} key={item.productID} />
-                            )
-                        })
-                    }
-                    {
-                        products.map((item) => {
-                            return(
-                              <ProductCard product={item} key={item.productID} />
-                            )
-                        })
-                    }
                 </div>    
                     
             }
