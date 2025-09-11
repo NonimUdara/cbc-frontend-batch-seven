@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { Loader } from "../components/loader";
 import ImageSlider from "../components/imageSlider";
 import { addToCart, loadCart } from "../utils/cart";
@@ -90,14 +90,22 @@ export default function ProductOverview() {
                 Add to Cart
               </button>
 
-              <button
-                className="w-full h-full border bg-accent border-accent text-white hover:bg-white hover:text-accent"
+              <Link
+                to="/checkout"
+                state={[{
+                  image: product.images[0],
+                  name: product.name,
+                  price: product.price,
+                  labledPrice: product.labledPrice,
+                  quantity: 1
+                }]}
+                className="w-full h-full flex items-center justify-center border bg-accent border-accent text-white hover:bg-white hover:text-accent"
                 onClick={() => {
                   console.log(loadCart());
                 }}
               >
                 Buy now
-              </button>
+              </Link>
             </div>
           </div>
         </div>

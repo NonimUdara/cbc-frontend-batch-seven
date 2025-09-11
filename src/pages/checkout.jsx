@@ -1,11 +1,20 @@
 import { CiCircleChevDown, CiCircleChevUp } from "react-icons/ci";
-import { addToCart, getTotal, loadCart } from "../utils/cart";
 import { BiTrash } from "react-icons/bi";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-export default function CartPage() {
-  const [cart, setCart] = useState(loadCart());
+export default function CheckoutPage() {
+  const location = useLocation();
+
+  const [cart, setCart] = useState(location.state);
+
+  function getTotal() {
+    let total = 0;
+    cart.forEach((item) => {
+      total += item.price * item.quantity;
+    });
+    return total;
+  }
 
   return (
     <div className="w-full h-[calc(100vh-100px)] bg-primary text-secondary flex flex-col pt-[25px] items-center ">
@@ -19,8 +28,8 @@ export default function CartPage() {
               <button
                 className="absolute text-red-500 right-[-40px] font-bold text-2xl rounded-full aspect-square hover:bg-red-500 hover:text-white p-[5px] "
                 onClick={() => {
-                  addToCart(item, -item.quantity);
-                  setCart(loadCart());
+                  const newCart = cart
+
                 }}
               >
                 <BiTrash />
@@ -40,16 +49,28 @@ export default function CartPage() {
                 <CiCircleChevUp
                   className="text-3xl "
                   onClick={() => {
-                    addToCart(item, 1);
-                    setCart(loadCart());
+                    
+                    const newCart = [...cart]
+
+                    newCart[index].quantity += 1
+
+                    setCart(newCart)
+
                   }}
                 />
                 <span className="text-2xl font-semibold ">{item.quantity}</span>
                 <CiCircleChevDown
                   className="text-3xl "
                   onClick={() => {
-                    addToCart(item, -1);
-                    setCart(loadCart());
+                    
+                    const newCart = [...cart]
+
+                    if (newCart[index].quantity > 1) {
+                      newCart[index].quantity -= 1
+                    }
+
+                    setCart(newCart)
+
                   }}
                 />
               </div>
@@ -67,13 +88,12 @@ export default function CartPage() {
           );
         })}
         <div className="w-full h-[120px] bg-white flex justify-end items-center relative ">
-          <Link
-            state={cart}
+          <button
             to="/checkout"
             className="absolute left-0 bg-accent text-white px-6 py-3 ml-[20px] font-semibold "
           >
-            Checkout
-          </Link>
+            order
+          </button>
           <div className="h-[50px] ">
             <span className="text-2xl font-semibold w-full text-right pr-[10px] text-accent ">
               Total : LKR {getTotal().toFixed(2)}
