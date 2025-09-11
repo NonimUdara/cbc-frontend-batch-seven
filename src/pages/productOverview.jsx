@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { useLocation, useParams } from "react-router-dom";
 import { Loader } from "../components/loader";
 import ImageSlider from "../components/imageSlider";
+import { addToCart, loadCart } from "../utils/cart";
 
 export default function ProductOverview() {
   const params = useParams();
@@ -32,9 +33,10 @@ export default function ProductOverview() {
       {status == "success" && (
         <div className="w-full h-full flex">
           <div className="w-[50%] h-full flex justify-center items-center">
-            <ImageSlider images={product.images} />
+            <div className="m-auto">
+              <ImageSlider images={product.images} />
+            </div>
           </div>
-
           <div className="w-[50%] h-full flex flex-col items-center gap-4 p-10">
             <span className="">{product.productID}</span>
             <h1 className="text-2xl font-bold text-center">
@@ -78,10 +80,22 @@ export default function ProductOverview() {
               </p>
             )}
             <div className="w-full h-[40px] flex gap-2">
-              <button className="w-full h-full border border-accent text-accent hover:bg-accent hover:text-white">
+              <button
+                className="w-full h-full border border-accent text-accent hover:bg-accent hover:text-white"
+                onClick={() => {
+                  addToCart(product, 1);
+                  toast.success("Product added to cart");
+                }}
+              >
                 Add to Cart
               </button>
-              <button className="w-full h-full border bg-accent border-accent text-white hover:bg-white hover:text-accent">
+
+              <button
+                className="w-full h-full border bg-accent border-accent text-white hover:bg-white hover:text-accent"
+                onClick={() => {
+                  console.log(loadCart());
+                }}
+              >
                 Buy now
               </button>
             </div>

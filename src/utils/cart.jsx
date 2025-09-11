@@ -12,7 +12,7 @@ export function addToCart(product, quantity){
     let cart = loadCart();
     const existingItemIndex = cart.findIndex(
         (item) => {
-            return item.product.productID == product.productID
+            return item.productID == product.productID
         }
     );
     if (existingItemIndex == -1){

@@ -21,7 +21,7 @@ export default function ProductCard(props) {
             }
             <p className="text-sm text-secondary/70">{product.productID}</p>
             <p className="text-sm text-secondary/70">{product.category}</p>
-            <Link state={product} to={"/overview/"+product.productID } className="w-full h-[30px] mt-[5px] border border-accent text-accent hover:bg-accent hover:text-white " >
+            <Link state={product} to={"/overview/"+product.productID } className="w-full h-[30px]  mt-[5px] border border-accent text-accent hover:bg-accent hover:text-white flex items-center justify-center " >
                 View Product
             </Link>
         </div>
