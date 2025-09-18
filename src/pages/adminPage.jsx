@@ -8,6 +8,7 @@ import { PiUsersThreeLight } from "react-icons/pi";
 import AdminProductPage from "./admin/adminProductPage";
 import AdminAddnewProduct from "./admin/adminAddNewProduct";
 import AdminUpdateProduct from "./admin/adminUpdateProduct";
+import AdminOrdersPage from "./admin/adminOrdersPage";
 
 
 export default function AdminPage() {
@@ -42,7 +43,7 @@ export default function AdminPage() {
                     <Routes path="/" >
                         <Route path="/*" element={<h1>Dashboard</h1>} />
                         <Route path="/products" element={<AdminProductPage />} />
-                        <Route path="/orders" element={<h1>Orders</h1>} />
+                        <Route path="/orders" element={<AdminOrdersPage />} />
                         <Route path="/add-product" element={<AdminAddnewProduct />} />
                         <Route path="/update-product" element={<AdminUpdateProduct />} />
                     </Routes>
