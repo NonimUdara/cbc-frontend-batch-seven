@@ -1,12 +1,15 @@
 import { CiCircleChevDown, CiCircleChevUp } from "react-icons/ci";
 import { BiTrash } from "react-icons/bi";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function CheckoutPage() {
   const location = useLocation();
 
   const [cart, setCart] = useState(location.state);
+  const navigate = useNavigate();
 
   function getTotal() {
     let total = 0;
@@ -14,6 +17,51 @@ export default function CheckoutPage() {
       total += item.price * item.quantity;
     });
     return total;
+  }
+
+  async function purchaseCart() {
+    const token = localStorage.getItem("token");
+    if (token == null) {
+      toast.error("You must be logged in to add a product.");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const items = [];
+
+      for (let i = 0; i < cart.length; i++) {
+        items.push({
+          productID: cart[i].productID,
+          quantity: cart[i].quantity,
+        });
+      }
+
+      await axios.post(
+        import.meta.env.VITE_API_URL + "/api/orders",
+        {
+          address: "No 123, Colombo, Sri Lanka",
+          items: items,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      toast.success("Order placed successfully");
+
+    } catch (error) {
+      toast.error("Error fetching products");
+      console.log(error);
+      //if error is 400
+      if (error.response && error.response.status == 400) {
+
+        toast.error(error.response.data.message);
+
+      }
+    }
   }
 
   return (
@@ -28,8 +76,7 @@ export default function CheckoutPage() {
               <button
                 className="absolute text-red-500 right-[-40px] font-bold text-2xl rounded-full aspect-square hover:bg-red-500 hover:text-white p-[5px] "
                 onClick={() => {
-                  const newCart = cart
-
+                  const newCart = cart;
                 }}
               >
                 <BiTrash />
@@ -49,28 +96,24 @@ export default function CheckoutPage() {
                 <CiCircleChevUp
                   className="text-3xl "
                   onClick={() => {
-                    
-                    const newCart = [...cart]
+                    const newCart = [...cart];
 
-                    newCart[index].quantity += 1
+                    newCart[index].quantity += 1;
 
-                    setCart(newCart)
-
+                    setCart(newCart);
                   }}
                 />
                 <span className="text-2xl font-semibold ">{item.quantity}</span>
                 <CiCircleChevDown
                   className="text-3xl "
                   onClick={() => {
-                    
-                    const newCart = [...cart]
+                    const newCart = [...cart];
 
                     if (newCart[index].quantity > 1) {
-                      newCart[index].quantity -= 1
+                      newCart[index].quantity -= 1;
                     }
 
-                    setCart(newCart)
-
+                    setCart(newCart);
                   }}
                 />
               </div>
@@ -90,6 +133,7 @@ export default function CheckoutPage() {
         <div className="w-full h-[120px] bg-white flex justify-end items-center relative ">
           <button
             to="/checkout"
+            onClick={purchaseCart}
             className="absolute left-0 bg-accent text-white px-6 py-3 ml-[20px] font-semibold "
           >
             order
