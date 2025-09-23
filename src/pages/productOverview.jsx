@@ -93,6 +93,7 @@ export default function ProductOverview() {
               <Link
                 to="/checkout"
                 state={[{
+                  productID: product.productID,
                   image: product.images[0],
                   name: product.name,
                   price: product.price,

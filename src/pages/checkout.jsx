@@ -36,7 +36,7 @@ export default function CheckoutPage() {
           quantity: cart[i].quantity,
         });
       }
-
+      
       await axios.post(
         import.meta.env.VITE_API_URL + "/api/orders",
         {
