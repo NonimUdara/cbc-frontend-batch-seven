@@ -20,6 +20,10 @@ export default function LoginPage() {
     localStorage.setItem("token", response.data.token);
     toast.success("Login successful!");
     const user = response.data.user;
+
+    const token = response.data.token; // 👈 backend sends token here
+    console.log("JWT Token:", token);
+    
     if(user.role === "admin") {
       navigate("/admin");
     } else {
