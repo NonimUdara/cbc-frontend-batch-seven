@@ -32,7 +32,7 @@ export default function AdminOrdersPage() {
           setOrders(response.data);
           setIsLoading(false);
         })
-        .catch((error) => console.error("Error fetching orders:", error));
+        .catch((error) => console.error(error.response.data.message));
     }
   }, [isLoading]);
 
