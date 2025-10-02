@@ -59,16 +59,19 @@ export default function TestPage() {
         //         </div>
         //     </div>
         // </div>
-        <div className="w-full h-full flex justify-center items-center">
-            <input type="file" onChange={
-                (e) => {
-                    setFile(e.target.files[0]);
-                    console.log(e.target.files[0]);
-                }
-            } />
-            <button onClick={uploadImage} className="w-[100px] bg-accent h-[40px] rounded-lg">
-                Upload
-            </button>
+        // <div className="w-full h-full flex justify-center items-center">
+        //     <input type="file" onChange={
+        //         (e) => {
+        //             setFile(e.target.files[0]);
+        //             console.log(e.target.files[0]);
+        //         }
+        //     } />
+        //     <button onClick={uploadImage} className="w-[100px] bg-accent h-[40px] rounded-lg">
+        //         Upload
+        //     </button>
+        // </div>
+        <div className="w-[400px] h-[400px] bg-green-300 lg:bg-blue-300 relative">
+
         </div>
     );
 }

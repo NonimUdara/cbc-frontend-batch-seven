@@ -28,16 +28,17 @@ export default function ProductOverview() {
   console.log(params);
 
   return (
-    <div className="w-full h-[calc(100vh-100px)] text-secondary ">
+    <div className="w-full lg:h-[calc(100vh-100px)] text-secondary  bg-primary ">
       {status == "loading" && <Loader />}
       {status == "success" && (
-        <div className="w-full h-full flex">
-          <div className="w-[50%] h-full flex justify-center items-center">
-            <div className="m-auto">
+        <div className="lg:flex-row w-full flex flex-col p-10">
+          <h1 className="text-2xl font-bold text-center lg:hidden">
+              {product.name}
+          </h1>
+          <div className="lg:w-[50%] w-full h-full flex justify-center items-center">
               <ImageSlider images={product.images} />
-            </div>
           </div>
-          <div className="w-[50%] h-full flex flex-col items-center gap-4 p-10">
+          <div className="lg:w-[50%] w-full h-full flex flex-col items-center gap-4 p-10 bg-primary ">
             <span className="">{product.productID}</span>
             <h1 className="text-2xl font-bold text-center">
               {product.name}
