@@ -9,6 +9,8 @@ export default function CheckoutPage() {
   const location = useLocation();
   const [cart, setCart] = useState(location.state);
   const navigate = useNavigate();
+  const [address, setAddress] = useState("");
+  const [name, setName] = useState("");
 
   function getTotal() {
     let total = 0;
@@ -39,7 +41,8 @@ export default function CheckoutPage() {
       await axios.post(
         import.meta.env.VITE_API_URL + "/api/orders",
         {
-          address: "No 123, Colombo, Sri Lanka",
+          address: address,
+          customerName: name==""?null:name,
           items: items,
         },
         {
@@ -60,8 +63,8 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="w-full lg:h-[calc(100vh-100px)] bg-primary text-secondary flex flex-col pt-[25px] items-center">
-      <div className="w-[400px] lg:w-[600px] flex flex-col gap-4">
+    <div className="w-full lg:h-[calc(100vh-100px)] overflow-y-scroll bg-primary text-secondary flex flex-col pt-[25px] items-center">
+      <div className="w-[400px] h-full lg:w-[600px] flex flex-col gap-4">
         {cart.map((item, index) => (
           <div
             key={index}
@@ -129,6 +132,42 @@ export default function CheckoutPage() {
         ))}
 
         <div className="w-full h-[120px] bg-white flex flex-col-reverse lg:flex-row justify-end items-center relative">
+          <div className="w-full h-full flex-row lg:flex justify-between items-center p-4 ">
+            <label
+              htmlFor="name"
+              className="text-sm text-secondary mr-2"
+            >
+              Name:
+            </label>
+            <input
+              type="text"
+              id="name"
+              className="w-[370px] h-[50px] border border-secondary/50 text-center rounded-md px-3"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="w-full h-[200px] bg-white flex flex-col-reverse lg:flex-row justify-end items-center relative">
+          <div className="w-full h-full flex-row lg:flex justify-between items-center p-4 ">
+            <label
+              htmlFor="address"
+              className="text-sm text-secondary mr-2"
+            >
+              Shipping Address:
+            </label>
+            <input
+              type="text"
+              id="address"
+              className="w-[370px] h-[120px] border border-secondary/50 text-center rounded-md px-3"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="w-full h-[120px] bg-white flex flex-col-reverse lg:flex-row justify-end items-center relative">
           <button
             onClick={purchaseCart}
             className="lg:absolute left-0 bg-accent text-white px-6 py-3 lg:ml-[20px] font-semibold"
@@ -145,8 +184,6 @@ export default function CheckoutPage() {
     </div>
   );
 }
-
-
 
 // import { CiCircleChevDown, CiCircleChevUp } from "react-icons/ci";
 // import { BiTrash } from "react-icons/bi";
