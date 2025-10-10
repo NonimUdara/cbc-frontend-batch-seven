@@ -46,6 +46,9 @@ export default function UserData() {
                 </select>
             </div>
         }
+        {
+            !loading && user === null && <button className="bg-accent text-white px-4 py-2 rounded-md" onClick={() => window.location.href = "/login"}>Login</button>
+        }
     </div>
 
 );
