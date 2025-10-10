@@ -38,6 +38,12 @@ export default function UserData() {
             user && <div className="h-full w-full flex justify-center items-center ">
                 <img src={user.image} alt="" className="w-[40px] h-[40px] rounded-full border-[2px] border-primary object-cover"/>
                 <span className="text-white ml-2">{user.firstName}</span>
+                <select className="bg-accent text-white ml-2 max-w-[20px]">
+                    <option value="" className="hidden"></option>
+                    <option value="">Account Settings</option>
+                    <option value="">Logout</option>
+                    <option value="">Orders</option>
+                </select>
             </div>
         }
     </div>
