@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BsCart3 } from "react-icons/bs";
 import { MdMenu } from "react-icons/md";
 import { Link } from "react-router-dom";
+import UserData from "./userData";
 
 export default function Header() {
 
@@ -44,6 +45,9 @@ export default function Header() {
                   <BsCart3 className="text-2xl" />
                 </a> */}
               </div>
+              <a className="p-4 border-b border-b-secondary/20 hover:bg-accent/20">
+                <UserData />
+              </a>
               <a href="/" className="p-4 border-b border-b-secondary/20 hover:bg-accent/20">
                 Home
               </a>
@@ -68,6 +72,9 @@ export default function Header() {
           <Link to="/products">Products</Link>
           <Link to="/about">About</Link>
           <Link to="/contact">Contact</Link>
+        </div>
+        <div className="h-full w-[200px] absolute right-[100px] hidden lg:flex justify-end items-center">
+          <UserData />
         </div>
         <Link
           className="hidden h-full lg:flex justify-center items-center absolute right-0 "
