@@ -3,9 +3,9 @@ import { BsCart3 } from "react-icons/bs";
 import { MdMenu } from "react-icons/md";
 import { Link } from "react-router-dom";
 import UserData from "./userData";
+import UserMobileData from "./userDataMobile";
 
 export default function Header() {
-
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
   return (
@@ -45,24 +45,42 @@ export default function Header() {
                   <BsCart3 className="text-2xl" />
                 </a> */}
               </div>
-              <a className="p-4 border-b border-b-secondary/20 hover:bg-accent/20">
+              {/* <a className="p-4 border-b border-b-secondary/20 hover:bg-accent/20">
                 <UserData />
-              </a>
-              <a href="/" className="p-4 border-b border-b-secondary/20 hover:bg-accent/20">
+              </a> */}
+              <a
+                href="/"
+                className="p-4 border-b border-b-secondary/20 hover:bg-accent/20"
+              >
                 Home
               </a>
-              <a href="/products" className="p-4 border-b border-b-secondary/20 hover:bg-accent/20">
+              <a
+                href="/products"
+                className="p-4 border-b border-b-secondary/20 hover:bg-accent/20"
+              >
                 Products
               </a>
-              <a href="/about" className="p-4 border-b border-b-secondary/20 hover:bg-accent/20">
+              <a
+                href="/about"
+                className="p-4 border-b border-b-secondary/20 hover:bg-accent/20"
+              >
                 About
               </a>
-              <a href="/contact" className="p-4 border-b border-b-secondary/20 hover:bg-accent/20">
+              <a
+                href="/contact"
+                className="p-4 border-b border-b-secondary/20 hover:bg-accent/20"
+              >
                 Contact
               </a>
-              <a href="/cart" className="p-4 border-b border-b-secondary/20 hover:bg-accent/20">
+              <a
+                href="/cart"
+                className="p-4 border-b border-b-secondary/20 hover:bg-accent/20"
+              >
                 Cart
               </a>
+              <div className="w-[300px] absolute bottom-[20px] lg:hidden flex justify-center items-center gap-4">
+                <UserMobileData />
+              </div>
             </div>
           </div>
         )}
