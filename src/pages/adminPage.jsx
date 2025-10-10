@@ -1,4 +1,4 @@
-import { Routes } from "react-router-dom";
+import { Routes, useNavigate } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FaChartLine } from "react-icons/fa";
@@ -9,9 +9,43 @@ import AdminProductPage from "./admin/adminProductPage";
 import AdminAddnewProduct from "./admin/adminAddNewProduct";
 import AdminUpdateProduct from "./admin/adminUpdateProduct";
 import AdminOrdersPage from "./admin/adminOrdersPage";
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Loader } from "../components/loader";
 
 
 export default function AdminPage() {
+
+    const navigate = useNavigate();
+    const [userLoaded, setUserLoaded] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token === null) {
+            toast.error("You must be an admin.");
+            navigate("/login");
+            return;
+        }
+        axios.get(import.meta.env.VITE_API_URL + "/api/users/me", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+    }).then((res) => {
+            if (res.data.role !== "admin") {
+                toast.error("You must be an admin to access the admin page.");
+                navigate("/");
+                return;
+            }
+            setUserLoaded(true);
+    }).catch((err) => {
+            console.log(err);
+            toast.error("Error loading user.");
+            navigate("/login");
+            return;
+        });
+    }, []);
+
     return (
         <div className="bg-primary w-full h-full flex p-2 text-secondary">
             <div className="w-[300px] h-full flex flex-col bg-primary items-center gap-[20px]" >
@@ -40,13 +74,13 @@ export default function AdminPage() {
             </div>
             <div className="w-[calc(100%-300px)] h-full bg-primary border-[4px] border-accent rounded-[20px] overflow-hidden " >
                 <div className="w-full max-w-full h-full max-h-full overflow-y-scroll ">
-                    <Routes path="/" >
+                    {userLoaded? <Routes path="/" >
                         <Route path="/*" element={<h1>Dashboard</h1>} />
                         <Route path="/products" element={<AdminProductPage />} />
                         <Route path="/orders" element={<AdminOrdersPage />} />
                         <Route path="/add-product" element={<AdminAddnewProduct />} />
                         <Route path="/update-product" element={<AdminUpdateProduct />} />
-                    </Routes>
+                    </Routes> : <Loader />}
                 </div>
             </div>
         </div>
