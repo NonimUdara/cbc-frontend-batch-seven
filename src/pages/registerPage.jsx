@@ -6,33 +6,36 @@ import { Link, useNavigate } from "react-router-dom";
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [confirmPassword, setconfirmPassword] = useState("");
   const navigate = useNavigate();
 
   async function register() {
+
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match.");
+      return;
+    }
+
     try {
       const response = await axios.post(
-        import.meta.env.VITE_API_URL + "/api/users/login",
+        import.meta.env.VITE_API_URL + "/api/users/",
         {
           email: email,
           password: password,
+          firstName: firstName,
+          lastName: lastName,
         }
       );
-      localStorage.setItem("token", response.data.token);
-      toast.success("Login successful!");
-      const user = response.data.user;
 
-      const token = response.data.token; // 👈 backend sends token here
-      console.log("JWT Token:", token);
+      toast.success("Registration successful!");
+      navigate("/login");
 
-      if (user.role === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/");
-      }
     } catch (e) {
-      console.error("Login failed:", e);
+      console.error("Registration failed:", e);
       //alert("Login failed. Please check your credentials and try again.");
-      toast.error("Login failed. Please check your credentials and try again.");
+      toast.error("Registration failed. Please check your credentials and try again.");
     }
   }
 
@@ -45,12 +48,7 @@ export default function RegisterPage() {
       <div className="relative z-10 w-full lg:w-1/2 flex justify-center items-center p-6 lg:p-0">
         <div className="w-full max-w-md backdrop-blur-2xl bg-white/10 border border-white/20 shadow-2xl rounded-2xl p-8 flex flex-col items-center gap-6 animate-fadeInUp">
           {/* Small screen logo */}
-          <img src="/logo.png" alt="CBC Logo" className="w-16 mb-2 lg:hidden" />
-
-          <h2 className="text-2xl font-bold text-white">Welcome Back</h2>
-          <p className="text-sm text-gray-300">
-            Register to continue your journey
-          </p>
+          <img src="/logo.png" alt="CBC Logo" className="w-28 drop-shadow-lg" />
 
           {/* Email */}
           <input
@@ -58,6 +56,24 @@ export default function RegisterPage() {
             placeholder="Email Address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl bg-white/95 text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[--color-accent] shadow-sm transition-all duration-200"
+          />
+
+          {/* First Name */}
+          <input
+            type="text"
+            placeholder="First Name"
+            value={firstName}
+            onChange={(e) => setfirstName(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl bg-white/95 text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[--color-accent] shadow-sm transition-all duration-200"
+          />
+
+          {/* Last Name */}
+          <input
+            type="text"
+            placeholder="Last Name"
+            value={lastName}
+            onChange={(e) => setlastName(e.target.value)}
             className="w-full px-4 py-3 rounded-xl bg-white/95 text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[--color-accent] shadow-sm transition-all duration-200"
           />
 
@@ -70,15 +86,14 @@ export default function RegisterPage() {
             className="w-full px-4 py-3 rounded-xl bg-white/95 text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[--color-accent] shadow-sm transition-all duration-200"
           />
 
-          {/* Forgot Password */}
-          <div className="w-full flex justify-end">
-            <a
-              href="/forgot-password"
-              className="text-sm text-[--color-accent] hover:underline"
-            >
-              Forgot Password?
-            </a>
-          </div>
+          {/* Confirm Password */}
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setconfirmPassword(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl bg-white/95 text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[--color-accent] shadow-sm transition-all duration-200"
+          />
 
           {/* Login Button */}
           <button
@@ -117,7 +132,6 @@ export default function RegisterPage() {
           Get Your Time Back with CBC ✨
         </span>
       </div>
-
     </div>
   );
 }
