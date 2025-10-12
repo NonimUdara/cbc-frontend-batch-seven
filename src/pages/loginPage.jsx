@@ -1,3 +1,4 @@
+import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -7,32 +8,39 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const googleLogin = useGoogleLogin({
+    onSuccess: (response) =>
+      axios
+        .post(import.meta.env.VITE_API_URL + "/api/users/google-login", {
+          token: response.access_token,
+        })
+  });
 
   async function login() {
-    try{
-        const response = await axios.post(
-      import.meta.env.VITE_API_URL + "/api/users/login",
-      {
-        email: email,
-        password: password,
-      }
-    );
-    localStorage.setItem("token", response.data.token);
-    toast.success("Login successful!");
-    const user = response.data.user;
+    try {
+      const response = await axios.post(
+        import.meta.env.VITE_API_URL + "/api/users/login",
+        {
+          email: email,
+          password: password,
+        }
+      );
+      localStorage.setItem("token", response.data.token);
+      toast.success("Login successful!");
+      const user = response.data.user;
 
-    const token = response.data.token; // 👈 backend sends token here
-    console.log("JWT Token:", token);
-    
-    if(user.role === "admin") {
-      navigate("/admin");
-    } else {
+      const token = response.data.token; // 👈 backend sends token here
+      console.log("JWT Token:", token);
+
+      if (user.role === "admin") {
+        navigate("/admin");
+      } else {
         navigate("/");
-    }
-    }catch(e){
-        console.error("Login failed:", e);
-        //alert("Login failed. Please check your credentials and try again.");
-        toast.error("Login failed. Please check your credentials and try again.");
+      }
+    } catch (e) {
+      console.error("Login failed:", e);
+      //alert("Login failed. Please check your credentials and try again.");
+      toast.error("Login failed. Please check your credentials and try again.");
     }
   }
 
@@ -43,14 +51,18 @@ export default function LoginPage() {
 
       {/* Branding Section */}
       <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-center items-center text-center p-10 text-white">
-        <img src="/logo.png" alt="CBC Logo" className="w-28 mb-6 drop-shadow-lg" />
+        <img
+          src="/logo.png"
+          alt="CBC Logo"
+          className="w-28 mb-6 drop-shadow-lg"
+        />
         <h1 className="text-4xl lg:text-5xl font-extrabold leading-snug tracking-wide">
           Crystal Beauty Clear
         </h1>
         <p className="mt-4 text-base lg:text-lg max-w-md text-gray-200">
           Step into elegance with{" "}
-          <span className="font-semibold">Crystal Beauty Clear</span>.  
-          Our premium cosmetics empower your natural glow.
+          <span className="font-semibold">Crystal Beauty Clear</span>. Our
+          premium cosmetics empower your natural glow.
         </p>
         <span className="mt-4 text-[--color-accent] font-bold text-lg">
           Get Your Time Back with CBC ✨
@@ -64,7 +76,9 @@ export default function LoginPage() {
           <img src="/logo.png" alt="CBC Logo" className="w-16 mb-2 lg:hidden" />
 
           <h2 className="text-2xl font-bold text-white">Welcome Back</h2>
-          <p className="text-sm text-gray-300">Login to continue your journey</p>
+          <p className="text-sm text-gray-300">
+            Login to continue your journey
+          </p>
 
           {/* Email */}
           <input
@@ -102,10 +116,20 @@ export default function LoginPage() {
             Login
           </button>
 
+          <button
+            onClick={googleLogin}
+            className="w-full py-3 rounded-xl bg-accent text-white font-semibold shadow-lg hover:scale-[1.03] transition-all duration-300"
+          >
+            Google Login
+          </button>
+
           {/* Footer */}
           <p className="text-black text-sm mt-3">
             Don’t have an account?{" "}
-            <Link to="/register" className="text-[--color-accent] hover:underline">
+            <Link
+              to="/register"
+              className="text-[--color-accent] hover:underline"
+            >
               Sign up
             </Link>
           </p>
