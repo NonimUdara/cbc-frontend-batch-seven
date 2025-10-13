@@ -13,7 +13,18 @@ export default function LoginPage() {
       axios
         .post(import.meta.env.VITE_API_URL + "/api/users/google-login", {
           token: response.access_token,
-        })
+        }).then((res) => {
+          localStorage.setItem("token", res.data.token);
+          const user = res.data.user;
+          if (user.role === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
+        }).catch((err) => {
+          console.log("Google Login Failed", err);
+          toast.error("Googlr Login failed. Please check your credentials and try again.");
+        }),
   });
 
   async function login() {
