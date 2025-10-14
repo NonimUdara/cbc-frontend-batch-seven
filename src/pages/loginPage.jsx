@@ -27,7 +27,6 @@ export default function LoginPage() {
         }),
   });
 
-  // Function to handle login
   async function login() {
     try {
       const response = await axios.post(
