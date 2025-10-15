@@ -74,8 +74,19 @@ export default function AdminUsersPage() {
 
   useEffect(() => {
     if (isLoading) {
+      const token = localStorage.getItem("token");
+      if (token == null) {
+        toast.error("You must be logged in to add a product.");
+        navigate("/login");
+        return;
+      }
+
       axios
-        .get(import.meta.env.VITE_API_URL + "/api/users/all-users")
+        .get(import.meta.env.VITE_API_URL + "/api/users/all-users", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((response) => {
           console.log("Products fetched:", response.data);
           setUsers(response.data);
@@ -107,7 +118,7 @@ export default function AdminUsersPage() {
       >
         <CiCirclePlus />
       </Link>
-      <div className="w-full max-w-7xl h-[97%] bg-white rounded-2xl shadow-xl p-4">
+      <div className="w-full max-w-7xl h-[97%] bg-white rounded-2xl shadow-xl p-4 min-h-screen">
         {/* Header with count */}
         <div className="flex items-center justify-between mb-6 border-b pb-3">
           <h1 className="text-2xl font-bold text-secondary">
@@ -115,9 +126,7 @@ export default function AdminUsersPage() {
           </h1>
           <span className="text-sm text-gray-600 bg-primary px-4 py-1 rounded-full">
             Total:{" "}
-            <span className="font-semibold text-secondary">
-              {users.length}
-            </span>
+            <span className="font-semibold text-secondary">{users.length}</span>
           </span>
         </div>
 
@@ -141,7 +150,7 @@ export default function AdminUsersPage() {
                   ].map((heading, index) => (
                     <th
                       key={index}
-                      className="p-4 text-secondary font-semibold text-sm uppercase border-b"
+                      className="p-4 text-secondary font-semibold text-sm uppercase border-b text-center"
                     >
                       {heading}
                     </th>
@@ -156,33 +165,49 @@ export default function AdminUsersPage() {
                       index % 2 === 0 ? "bg-white" : "bg-gray-50"
                     }`}
                   >
-                    <td className="p-4 border-b">
+                    <td className="p-4 border-b text-center flex items-center justify-center">
                       <img
                         src={user.image}
+                        referrerPolicy="no-referrer"
                         alt={user.firstName}
-                        className="w-14 h-14 rounded-md object-cover border border-gray-200 shadow-sm"
+                        className={
+                          "w-14 h-14 rounded-full object-cover border-4 " +
+                          (user.isBlock ? "border-red-600" : "border-green-600")
+                        }
                       />
                     </td>
-                    <td className="p-4 border-b text-gray-700 text-sm">
-                      {user.email}{user.isEmailVerified&&<MdVerified/>}
+
+                    <td className="p-4 border-b text-gray-700 text-sm text-center">
+                      <div className="flex items-center gap-2 text-center items-center justify-center">
+                        <span>{user.email}</span>
+                        {user.isEmailVerified && (
+                          <MdVerified className="text-blue-500 text-lg" />
+                        )}
+                      </div>
                     </td>
-                    <td className="p-4 border-b text-gray-800 font-medium">
+
+                    <td className="p-4 border-b text-gray-800 font-medium text-center">
                       {user.firstName}
                     </td>
-                    <td className="p-4 border-b text-gray-700 text-sm">
+                    <td className="p-4 border-b text-gray-700 text-sm text-center">
                       {user.lastName}
                     </td>
-                    <td className="p-4 border-b text-gray-700 text-sm">
-                      {
-                        user.role == "admin"&&<MdOutlineAdminPanelSettings/>
-                      }
-                      {user.role}
+                    <td className="p-4 border-b text-gray-700 text-sm ">
+                      <div className="flex items-center justify-center gap-2">
+                        {user.role === "admin" && (
+                          <MdOutlineAdminPanelSettings className="text-purple-600 text-lg" />
+                        )}
+                        <span className="capitalize">{user.role}</span>
+                      </div>
                     </td>
+
                     <td className="p-4 border-b">
                       <div className="flex gap-3 justify-center">
-                        {
-                            user.isBlock?<button>Unblock</button>:<button>Block</button>
-                        }
+                        {user.isBlock ? (
+                          <button>Unblock</button>
+                        ) : (
+                          <button>Block</button>
+                        )}
                       </div>
                     </td>
                   </tr>
