@@ -6,6 +6,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader } from "../../components/loader";
+import { MdOutlineAdminPanelSettings, MdVerified } from "react-icons/md";
 
 function UserBlockConfirm(props) {
   const email = props.email;
@@ -89,13 +90,13 @@ export default function AdminUsersPage() {
       {
         // if isDeleteConfirmVisible is true, show the ProductDeleteConfirm component
         isBlockConfirmVisible && (
-          <ProductDeleteConfirm
+          <UserBlockConfirm
             refresh={() => {
               setIsLoading(true);
             }}
-            productID={productToDelete}
+            email={userToBlock.email}
             close={() => {
-              setIsDeleteConfirmVisible(false);
+              setIsBlockConfirmVisible(false);
             }}
           />
         )
@@ -110,12 +111,12 @@ export default function AdminUsersPage() {
         {/* Header with count */}
         <div className="flex items-center justify-between mb-6 border-b pb-3">
           <h1 className="text-2xl font-bold text-secondary">
-            Products Management
+            Users Management
           </h1>
           <span className="text-sm text-gray-600 bg-primary px-4 py-1 rounded-full">
             Total:{" "}
             <span className="font-semibold text-secondary">
-              {products.length}
+              {users.length}
             </span>
           </span>
         </div>
@@ -132,12 +133,10 @@ export default function AdminUsersPage() {
                 <tr>
                   {[
                     "Image",
-                    "Product ID",
-                    "Product Name",
-                    "Price",
-                    "Labled Price",
-                    "Category",
-                    "Stock",
+                    "Email",
+                    "First Name",
+                    "Last Name",
+                    "Role",
                     "Actions",
                   ].map((heading, index) => (
                     <th
@@ -150,7 +149,7 @@ export default function AdminUsersPage() {
                 </tr>
               </thead>
               <tbody>
-                {products.map((item, index) => (
+                {users.map((user, index) => (
                   <tr
                     key={index}
                     className={`transition-colors duration-300 hover:bg-[#FEF9F4] ${
@@ -159,52 +158,31 @@ export default function AdminUsersPage() {
                   >
                     <td className="p-4 border-b">
                       <img
-                        src={item.images[0]}
-                        alt={item.name}
+                        src={user.image}
+                        alt={user.firstName}
                         className="w-14 h-14 rounded-md object-cover border border-gray-200 shadow-sm"
                       />
                     </td>
                     <td className="p-4 border-b text-gray-700 text-sm">
-                      {item.productID}
+                      {user.email}{user.isEmailVerified&&<MdVerified/>}
                     </td>
                     <td className="p-4 border-b text-gray-800 font-medium">
-                      {item.name}
+                      {user.firstName}
                     </td>
                     <td className="p-4 border-b text-gray-700 text-sm">
-                      ${item.price}
+                      {user.lastName}
                     </td>
                     <td className="p-4 border-b text-gray-700 text-sm">
-                      ${item.labledPrice}
-                    </td>
-                    <td className="p-4 border-b text-gray-700 text-sm">
-                      {item.category}
-                    </td>
-                    <td className="p-4 border-b text-gray-700 text-sm">
-                      {item.stock}
+                      {
+                        user.role == "admin"&&<MdOutlineAdminPanelSettings/>
+                      }
+                      {user.role}
                     </td>
                     <td className="p-4 border-b">
                       <div className="flex gap-3 justify-center">
-                        <button
-                          className="p-2 rounded-full hover:bg-red-50 text-gray-600 hover:text-red-600 transition"
-                          title="Delete"
-                          onClick={() => {
-                            setProductToDelete(item.productID);
-                            setIsDeleteConfirmVisible(true);
-                          }}
-                        >
-                          <IoTrashOutline size={18} />
-                        </button>
-                        <button
-                          className="p-2 rounded-full hover:bg-primary text-gray-600 hover:text-accent transition"
-                          title="Edit"
-                          onClick={() =>
-                            navigate("/admin/update-product", {
-                              state: item,
-                            })
-                          }
-                        >
-                          <FaRegEdit size={18} />
-                        </button>
+                        {
+                            user.isBlock?<button>Unblock</button>:<button>Block</button>
+                        }
                       </div>
                     </td>
                   </tr>
