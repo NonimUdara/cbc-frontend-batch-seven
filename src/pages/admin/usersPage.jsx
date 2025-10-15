@@ -9,7 +9,7 @@ import { Loader } from "../../components/loader";
 import { MdOutlineAdminPanelSettings, MdVerified } from "react-icons/md";
 
 function UserBlockConfirm(props) {
-  const email = props.email;
+  const email = props.user.email;
   const close = props.close;
   const refresh = props.refresh;
   function blockUser() {
@@ -42,7 +42,7 @@ function UserBlockConfirm(props) {
         >
           X
         </button>
-        <p className="text-xl font-semibold">
+        <p className="text-xl font-semibold text-center">
           Are you sure you want to block the user with email : {email} ?
           <div className="flex gap-6 justify-center mt-6">
             <button
@@ -105,19 +105,13 @@ export default function AdminUsersPage() {
             refresh={() => {
               setIsLoading(true);
             }}
-            email={userToBlock.email}
+            email={userToBlock}
             close={() => {
               setIsBlockConfirmVisible(false);
             }}
           />
         )
       }
-      <Link
-        to="/admin/add-product"
-        className="fixed right-[50px] bottom-[50px] text-5xl hover:text-accent px-4"
-      >
-        <CiCirclePlus />
-      </Link>
       <div className="w-full max-w-7xl h-[97%] bg-white rounded-2xl shadow-xl p-4 min-h-screen">
         {/* Header with count */}
         <div className="flex items-center justify-between mb-6 border-b pb-3">
@@ -178,7 +172,7 @@ export default function AdminUsersPage() {
                     </td>
 
                     <td className="p-4 border-b text-gray-700 text-sm text-center">
-                      <div className="flex items-center gap-2 text-center items-center justify-center">
+                      <div className="flex items-center gap-2 text-center justify-center">
                         <span>{user.email}</span>
                         {user.isEmailVerified && (
                           <MdVerified className="text-blue-500 text-lg" />
@@ -203,11 +197,15 @@ export default function AdminUsersPage() {
 
                     <td className="p-4 border-b">
                       <div className="flex gap-3 justify-center">
-                        {user.isBlock ? (
-                          <button>Unblock</button>
-                        ) : (
-                          <button>Block</button>
-                        )}
+                        {
+                            <button
+                             onClick={() => {
+                                setUserToBlock(user);
+                                setIsBlockConfirmVisible(true);                             
+                             }}
+                             className="w-[80px] h-[40px] bg-accent hover:bg-accent/90 text-white text-sm font-semibold py-2 px-4 rounded-lg cursor-pointer"
+                            >{user.isBlock ? "Unblock" : "Block"}</button>
+                        }
                       </div>
                     </td>
                   </tr>
