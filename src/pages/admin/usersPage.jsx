@@ -15,22 +15,28 @@ function UserBlockConfirm(props) {
   function blockUser() {
     const token = localStorage.getItem("token");
 
-    // axios
-    //   .delete(import.meta.env.VITE_API_URL + "/api/products/" + productID, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log("Product deleted:", response.data);
-    //     close();
-    //     toast.success("Product deleted successfully");
-    //     refresh();
-    //     // window.location.reload();
-    //   })
-    //   .catch(() => {
-    //     toast.error("Error deleting product");
-    //   });
+    axios
+      .put(
+        import.meta.env.VITE_API_URL + "/api/users/block/" + email,
+        {
+          isBlock: !props.user.isBlock,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log("User Updated:", response.data);
+        close();
+        toast.success("User block status updated successfully");
+        refresh();
+        // window.location.reload();
+      })
+      .catch(() => {
+        toast.error("Error blocking user");
+      });
   }
 
   return (
@@ -43,13 +49,13 @@ function UserBlockConfirm(props) {
           X
         </button>
         <p className="text-xl font-semibold text-center">
-          Are you sure you want to block the user with email : {email} ?
+          Are you sure you want to {props.user.isBlock ? "unblock" : "block"} the user with email : {email} ?
           <div className="flex gap-6 justify-center mt-6">
             <button
               onClick={blockUser}
               className="w-[100px] bg-red-600 p-[5px] text-white hover:bg-accent hover:text-black  "
             >
-              Block
+              Yes
             </button>
             <button
               onClick={close}
@@ -105,7 +111,7 @@ export default function AdminUsersPage() {
             refresh={() => {
               setIsLoading(true);
             }}
-            email={userToBlock}
+            user={userToBlock}
             close={() => {
               setIsBlockConfirmVisible(false);
             }}
@@ -198,13 +204,15 @@ export default function AdminUsersPage() {
                     <td className="p-4 border-b">
                       <div className="flex gap-3 justify-center">
                         {
-                            <button
-                             onClick={() => {
-                                setUserToBlock(user);
-                                setIsBlockConfirmVisible(true);                             
-                             }}
-                             className="w-[80px] h-[40px] bg-accent hover:bg-accent/90 text-white text-sm font-semibold py-2 px-4 rounded-lg cursor-pointer"
-                            >{user.isBlock ? "Unblock" : "Block"}</button>
+                          <button
+                            onClick={() => {
+                              setUserToBlock(user);
+                              setIsBlockConfirmVisible(true);
+                            }}
+                            className="w-[80px] h-[40px] bg-accent hover:bg-accent/90 text-white text-sm font-semibold py-2 px-4 rounded-lg cursor-pointer"
+                          >
+                            {user.isBlock ? "Unblock" : "Block"}
+                          </button>
                         }
                       </div>
                     </td>
