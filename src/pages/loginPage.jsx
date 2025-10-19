@@ -23,7 +23,7 @@ export default function LoginPage() {
           }
         }).catch((err) => {
           console.log("Google Login Failed", err);
-          toast.error("Googlr Login failed. Please check your credentials and try again.");
+          toast.error(err.response.data.message);
         }),
   });
 
