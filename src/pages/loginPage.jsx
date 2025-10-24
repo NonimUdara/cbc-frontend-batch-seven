@@ -63,7 +63,7 @@ export default function LoginPage() {
       {/* Branding Section */}
       <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-center items-center text-center p-10 text-white">
         <img
-          src="/logo.png"
+          src="./logo.png"
           alt="CBC Logo"
           className="w-28 mb-6 drop-shadow-lg"
         />
