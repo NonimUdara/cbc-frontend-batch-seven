@@ -206,59 +206,61 @@ export default function CheckoutPage() {
 
   // 🛒 Place Order
   async function purchaseCart() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("You must be logged in to place an order.");
-      navigate("/login");
-      return;
-    }
+  const token = localStorage.getItem("token");
 
-    if (cart.length === 0) {
-      toast.error("Your cart is empty.");
-      return;
-    }
+  if (!token) {
+    toast.error("You must be logged in to place an order.");
+    navigate("/login");
+    return;
+  }
 
-    if (address.trim() === "") {
-      toast.error("Please enter your shipping address.");
-      return;
-    }
+  if (cart.length === 0) {
+    toast.error("Your cart is empty.");
+    return;
+  }
 
-    try {
-      const items = cart.map((item) => ({
-        productID: item.productID,
-        quantity: item.quantity,
-      }));
+  if (address.trim() === "") {
+    toast.error("Please enter your shipping address.");
+    return;
+  }
 
-      await axios.post(
-        import.meta.env.VITE_API_URL + "/api/orders",
-        {
-          address,
-          customerName: name === "" ? null : name,
-          items,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  try {
+    const items = cart.map((item) => ({
+      productID: item.productID,
+      quantity: item.quantity,
+    }));
 
-      toast.success("Order placed successfully");
-
-      // 🧹 Clear cart after successful order
-      setCart([]);
-      localStorage.removeItem("cart");
-
-      navigate("/"); // Redirect to homepage
-    } catch (error) {
-      console.error(error);
-      toast.error("Error placing order");
-
-      if (error.response && error.response.status === 400) {
-        toast.error(error.response.data.message);
+    await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/orders`,
+      {
+        address,
+        customerName: name || null,
+        items,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
       }
+    );
+
+    toast.success("Order placed successfully ✅");
+
+    setCart([]);
+    localStorage.removeItem("cart");
+    navigate("/");
+  } catch (error) {
+    console.error(error);
+
+    if (error.response?.status === 401) {
+      toast.error("Session expired. Please log in again.");
+      localStorage.removeItem("token");
+      navigate("/login");
+    } else if (error.response?.status === 400) {
+      toast.error(error.response.data.message);
+    } else {
+      toast.error("Error placing order");
     }
   }
+}
 
   return (
     <div className="w-full lg:h-[calc(100vh-100px)] overflow-y-scroll bg-primary text-secondary flex flex-col pt-[25px] items-center">
