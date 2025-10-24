@@ -40,7 +40,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="w-full h-screen flex flex-col lg:flex-row bg-[url('./bg.jpg')] bg-cover bg-center relative">
+    <div className="w-full h-screen flex flex-col lg:flex-row bg-[url('/bg.jpg')] bg-cover bg-center relative">
       {/* Dark overlay always full screen */}
       <div className="absolute inset-0 bg-black/60"></div>
 
@@ -48,7 +48,7 @@ export default function RegisterPage() {
       <div className="relative z-10 w-full lg:w-1/2 flex justify-center items-center p-6 lg:p-0">
         <div className="w-full max-w-md backdrop-blur-2xl bg-white/10 border border-white/20 shadow-2xl rounded-2xl p-8 flex flex-col items-center gap-6 animate-fadeInUp">
           {/* Small screen logo */}
-          <img src="./logo.png" alt="CBC Logo" className="w-28 drop-shadow-lg" />
+          <img src="/logo.png" alt="CBC Logo" className="w-28 drop-shadow-lg" />
 
           {/* Email */}
           <input

@@ -56,14 +56,14 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="w-full h-screen flex flex-col lg:flex-row bg-[url('./bg.jpg')] bg-cover bg-center relative">
+    <div className="w-full h-screen flex flex-col lg:flex-row bg-[url('/bg.jpg')] bg-cover bg-center relative">
       {/* Dark overlay always full screen */}
       <div className="absolute inset-0 bg-black/60"></div>
 
       {/* Branding Section */}
       <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-center items-center text-center p-10 text-white">
         <img
-          src="./logo.png"
+          src="/logo.png"
           alt="CBC Logo"
           className="w-28 mb-6 drop-shadow-lg"
         />
