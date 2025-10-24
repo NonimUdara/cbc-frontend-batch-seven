@@ -207,7 +207,7 @@ export default function CheckoutPage() {
   // 🛒 Place Order
   async function purchaseCart() {
     const token = localStorage.getItem("token");
-    if (token == null) {
+    if (!token) {
       toast.error("You must be logged in to place an order.");
       navigate("/login");
       return;
