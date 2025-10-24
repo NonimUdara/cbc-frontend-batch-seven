@@ -54,7 +54,7 @@ export default function CheckoutPage() {
 
       toast.success("Order placed successfully");
     } catch (error) {
-      toast.error("Error fetching products");
+      toast.error("Error placing order");
       console.log(error);
       if (error.response && error.response.status == 400) {
         toast.error(error.response.data.message);
