@@ -10,6 +10,7 @@ import AdminPage from "./pages/adminPage";
 import RegisterPage from "./pages/registerPage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ForgotPassword from "./pages/forgot-password";
+import UserSettings from "./pages/settings";
 
 function App() {
   return (
@@ -68,6 +69,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/admin/*" element={<AdminPage />} />
               <Route path="/test" element={<TestPage />}></Route>
+              <Route path="/settings" element={<UserSettings />}></Route>
             </Routes>
           </div>
         </GoogleOAuthProvider>
