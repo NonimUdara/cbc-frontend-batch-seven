@@ -15,7 +15,7 @@ export default function ForgotPassword() {
     async function sendOTP(){
 
         try{
-            await axios.get(import.meta.env.VITE_API_URL + "/api/users/send-otp/" + email)
+            await axios.get(import.meta.env.VITE_API_URL + "/api/users/send-otp/"+email)
             toast.success("OTP sent successfully"+email);
             setStep("otp");
         } catch(e) {
