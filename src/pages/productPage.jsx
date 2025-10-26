@@ -23,7 +23,7 @@ export default function ProductPage() {
           toast.error("Error fetching products");
         });
     }
-  }, []);
+  }, [isLoading]);
 
   return (
     <div className="w-full min-h-[calc(100vh-100px)] bg-primary">
