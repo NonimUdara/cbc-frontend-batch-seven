@@ -65,7 +65,7 @@ export default function ForgotPassword() {
                 <h1 className="text-3xl font-bold text-secondary ">
                     Reset Password
                 </h1>
-                <input type="text" value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="Enter your email address" className="w-[300px] h-[50px] rounded-lg bg-white/30 px-3 py-2 mt-5" />
+                <input type="text" value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="Enter your OTP" className="w-[300px] h-[50px] rounded-lg bg-white/30 px-3 py-2 mt-5" />
                 <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Enter new password" className="w-[300px] h-[50px] rounded-lg bg-white/30 px-3 py-2 mt-5" />
                 <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm new password" className="w-[300px] h-[50px] rounded-lg bg-white/30 px-3 py-2 mt-5" />
                 <button className="w-[300px] h-[50px] rounded-lg bg-white/30 px-3 py-2 mt-5" onClick={changePassword}>
