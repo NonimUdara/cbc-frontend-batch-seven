@@ -1,7 +1,9 @@
 @import "tailwindcss";
 @import "tailwindcss";
 @theme {
-  --color-accent: #FA812F;
-  --color-primary: #FEF3E2;
-  --color-secondary: #393e46;
+  --color-accent: #FA812F;     /* Vibrant Orange - For CTA buttons, highlights */
+  --color-primary: #FFF7F0;    /* Soft cream background */
+  --color-secondary: #7A3E1D;  /* Deep burnt orange - for headings/text */
+  --color-muted: #C48A6A;      /* Muted orange/peach - for secondary text */
+  --color-border: #FAD9B5;     /* Light orange border */
 }
