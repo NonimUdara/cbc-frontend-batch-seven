@@ -48,7 +48,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="w-full min-h-screen bg-primary text-secondary font-sans flex flex-col justify-center">
+    <div className="w-full min-h-screen bg-primary text-secondary font-sans flex flex-col">
       {/* Hero Slider */}
       <section className="relative w-full h-screen overflow-hidden flex justify-center items-center">
         <AnimatePresence>
@@ -64,17 +64,17 @@ export default function HomePage() {
           />
         </AnimatePresence>
 
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-secondary/30 flex flex-col justify-center items-center text-center px-4 sm:px-6 md:px-0">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary drop-shadow-lg max-w-3xl">
+        {/* Hero Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-secondary/40 via-secondary/10 to-secondary/70 flex flex-col justify-center items-center text-center px-4 sm:px-6 md:px-0">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-primary drop-shadow-xl max-w-3xl leading-tight">
             Crystal Beauty Clear
           </h1>
-          <p className="mt-4 text-base sm:text-lg md:text-2xl text-primary drop-shadow-md max-w-xl">
-            Reveal Your Natural Glow
+          <p className="mt-6 text-lg sm:text-xl md:text-2xl text-primary drop-shadow-lg max-w-2xl">
+            Reveal Your Natural Glow with Premium Skincare & Beauty Essentials
           </p>
           <a
             href="/products"
-            className="mt-6 px-6 py-3 sm:px-8 sm:py-3 bg-accent text-primary font-semibold rounded-lg shadow-lg hover:bg-accent/90 transition"
+            className="mt-8 px-8 py-4 sm:px-10 sm:py-4 bg-accent text-primary font-semibold rounded-xl shadow-xl hover:shadow-2xl hover:bg-accent/90 transition-all duration-300"
           >
             Explore Now
           </a>
@@ -82,49 +82,50 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-primary flex flex-col items-center px-4 sm:px-6 lg:px-0">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-10 text-secondary text-center">
+      <section className="py-20 bg-primary flex flex-col items-center px-4 sm:px-6 lg:px-0">
+        <h2 className="text-4xl sm:text-5xl font-bold mb-12 text-secondary text-center">
           Why Choose Us
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-30 justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 justify-items-center">
           {[
             {
-              icon: <FaLeaf className="text-accent w-12 h-12 mb-3" />,
+              icon: <FaLeaf className="text-accent w-14 h-14 mb-4" />,
               title: "Natural Ingredients",
               desc: "Pure, gentle skincare that enhances your beauty naturally.",
             },
             {
-              icon: <FaShippingFast className="text-accent w-12 h-12 mb-3" />,
+              icon: <FaShippingFast className="text-accent w-14 h-14 mb-4" />,
               title: "Fast Delivery",
               desc: "Quick and safe delivery right to your door.",
             },
             {
-              icon: <FaGift className="text-accent w-12 h-12 mb-3" />,
+              icon: <FaGift className="text-accent w-14 h-14 mb-4" />,
               title: "Special Offers",
               desc: "Exclusive discounts for our loyal customers.",
             },
           ].map((feature, i) => (
-            <div
+            <motion.div
               key={i}
-              className="bg-white p-6 rounded-xl shadow-xl hover:scale-105 transition transform w-64 text-center flex flex-col items-center"
+              whileHover={{ scale: 1.05 }}
+              className="bg-white p-8 rounded-2xl shadow-2xl transition-transform w-72 text-center flex flex-col items-center"
             >
               {feature.icon}
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+              <h3 className="text-2xl font-semibold mb-3">{feature.title}</h3>
               <p className="text-muted">{feature.desc}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
 
       {/* Featured Products */}
-      <section className="py-16 bg-primary px-4 sm:px-6 lg:px-0">
-        <h2 className="text-3xl sm:text-4xl font-bold text-secondary mb-12 text-center">
+      <section className="py-20 bg-primary px-4 sm:px-6 lg:px-0">
+        <h2 className="text-4xl sm:text-5xl font-bold text-secondary mb-14 text-center">
           Featured Products
         </h2>
         {isLoading ? (
           <Loader />
         ) : (
-          <div className="flex flex-wrap justify-center gap-8 max-w-7xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-10 max-w-7xl mx-auto">
             {products.map((product) => (
               <ProductCard product={product} key={product.productID} />
             ))}
@@ -132,20 +133,55 @@ export default function HomePage() {
         )}
       </section>
 
+      {/* Testimonials Section */}
+      <section className="py-20 bg-accent/10 flex flex-col items-center px-4 sm:px-6 lg:px-0">
+        <h2 className="text-4xl sm:text-5xl font-bold mb-12 text-secondary text-center">
+          What Our Customers Say
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+          {[
+            {
+              name: "Sophia L.",
+              review:
+                "Amazing products! My skin feels refreshed and natural. Highly recommend!",
+            },
+            {
+              name: "Emma R.",
+              review:
+                "Fast delivery and excellent customer service. Love Crystal Beauty Clear!",
+            },
+            {
+              name: "Olivia M.",
+              review:
+                "The natural ingredients really make a difference. My skin glows now.",
+            },
+          ].map((testimonial, i) => (
+            <motion.div
+              key={i}
+              whileHover={{ scale: 1.02 }}
+              className="bg-white p-8 rounded-2xl shadow-xl text-center"
+            >
+              <p className="text-muted mb-4">"{testimonial.review}"</p>
+              <h4 className="font-semibold text-secondary">{testimonial.name}</h4>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="bg-secondary text-primary py-12 px-6 ">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 text-center md:text-center gap-8">
+      <footer className="bg-secondary text-primary py-16 px-6 ">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 text-center md:text-left gap-12">
           {/* About */}
-          <div className="flex flex-col items-center ">
-            <h3 className="text-xl font-bold mb-4">Crystal Beauty Clear</h3>
+          <div className="flex flex-col items-center">
+            <h3 className="text-2xl font-bold mb-4">Crystal Beauty Clear</h3>
             <p className="text-white/70 max-w-xs">
               Premium skincare products designed to enhance your natural beauty.
             </p>
           </div>
 
           {/* Quick Links */}
-          <div className="flex flex-col items-center ">
-            <h4 className="font-semibold mb-3">Quick Links</h4>
+          <div className="flex flex-col items-center">
+            <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
                 <a href="/" className="hover:text-accent transition">
@@ -172,7 +208,7 @@ export default function HomePage() {
 
           {/* Social */}
           <div className="flex flex-col items-center">
-            <h4 className="font-semibold mb-3">Follow Us</h4>
+            <h4 className="font-semibold mb-4">Follow Us</h4>
             <div className="flex gap-4 text-xl justify-center md:justify-start">
               <a href="#" className="hover:text-accent transition">
                 <FaInstagram />
@@ -187,7 +223,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <p className="text-center text-white/60 mt-8 text-sm">
+        <p className="text-center text-white/60 mt-10 text-sm">
           &copy; {new Date().getFullYear()} Crystal Beauty Clear. All rights
           reserved.
         </p>
