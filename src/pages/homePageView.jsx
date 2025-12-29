@@ -14,9 +14,9 @@ import {
 } from "react-icons/fa";
 
 const sliderImages = [
-  "https://images.unsplash.com/photo-1612832020861-2b6b8bba0fa1?auto=format&fit=crop&w=1950&q=80",
-  "https://images.unsplash.com/photo-1612831455543-abe6c9b6c933?auto=format&fit=crop&w=1950&q=80",
-  "https://images.unsplash.com/photo-1600180758895-65f9c7556a5e?auto=format&fit=crop&w=1950&q=80",
+  "/Home1.jpg",
+  "/Home2.jpg",
+  "/Home3.jpg",
 ];
 
 export default function HomePage() {
