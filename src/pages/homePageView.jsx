@@ -117,24 +117,65 @@ export default function HomePageView() {
         </div>
       </section>
 
-      {/* Featured Products */}
-      <section className="py-20 bg-primary px-4 sm:px-6 lg:px-0">
-        <h2 className="text-4xl sm:text-5xl font-bold text-secondary mb-14 text-center">
-          Featured Products
-        </h2>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <div className="flex flex-wrap justify-center gap-10 max-w-7xl mx-auto">
-            {products.map((product) => (
-              <ProductCard product={product} key={product.productID} />
-            ))}
-          </div>
-        )}
+      {/* Product Categories */}
+      <section className="py-24 bg-accent/10 px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl sm:text-5xl font-bold mb-6">
+            Explore Categories
+          </h2>
+          <p className="text-muted max-w-2xl mx-auto text-lg">
+            Discover collections designed to match your lifestyle.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+          {[
+            {
+              title: "Electronics",
+              desc: "Smart technology for modern living.",
+              image: "/electronics.jpg",
+            },
+            {
+              title: "Fashion",
+              desc: "Timeless style crafted for confidence.",
+              image: "/fashion.jpg",
+            },
+            {
+              title: "Beauty",
+              desc: "Nourish your glow with premium care.",
+              image: "/beauty.jpg",
+            },
+          ].map((cat, i) => (
+            <motion.a
+              href="/products"
+              key={i}
+              whileHover={{ scale: 1.03 }}
+              className="relative h-[380px] rounded-2xl overflow-hidden shadow-2xl group"
+            >
+              <img
+                src={cat.image}
+                alt={cat.title}
+                className="absolute w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-secondary/60 flex flex-col justify-center items-center text-center px-6">
+                <h3 className="text-3xl font-bold text-primary mb-3">
+                  {cat.title}
+                </h3>
+                <p className="text-primary/90">{cat.desc}</p>
+              </div>
+            </motion.a>
+          ))}
+        </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-accent/10 flex flex-col items-center px-4 sm:px-6 lg:px-0">
+      <section className="py-20 bg-primary flex flex-col items-center px-4 sm:px-6 lg:px-0">
         <h2 className="text-4xl sm:text-5xl font-bold mb-12 text-secondary text-center">
           What Our Customers Say
         </h2>
@@ -159,7 +200,7 @@ export default function HomePageView() {
             <motion.div
               key={i}
               whileHover={{ scale: 1.02 }}
-              className="bg-white p-8 rounded-2xl shadow-xl text-center"
+              className="bg-accent/10 p-8 rounded-2xl shadow-xl text-center"
             >
               <p className="text-muted mb-4">"{testimonial.review}"</p>
               <h4 className="font-semibold text-secondary">{testimonial.name}</h4>
