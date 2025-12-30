@@ -27,7 +27,11 @@ export default function Header() {
       <div className="max-w-7xl mx-auto h-[80px] px-6 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <img src="/logoColour.png" alt="Crystal Beauty Clear" className="h-[100px] object-contain" />
+          <img
+            src="/logoColour.png"
+            alt="Crystal Beauty Clear"
+            className="h-[100px] object-contain"
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -90,8 +94,12 @@ export default function Header() {
             >
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-border">
-                <Link to="/" className="flex items-center" onClick={handleLinkClick}>
-                  <img src=""  />
+                <Link
+                  to="/"
+                  className="flex items-center"
+                  onClick={handleLinkClick}
+                >
+                  <img src="" />
                 </Link>
                 <button
                   onClick={() => setIsSideBarOpen(false)}
@@ -110,19 +118,21 @@ export default function Header() {
                     onClick={handleLinkClick}
                     className={({ isActive }) =>
                       `py-4 px-2 text-lg font-medium transition-colors border-b border-border ${
-                        isActive ? "text-accent" : "text-secondary hover:text-accent"
+                        isActive
+                          ? "text-accent"
+                          : "text-secondary hover:text-accent"
                       }`
                     }
                   >
                     {link.name}
                   </NavLink>
                 ))}
-              </nav>
 
-              {/* User Info */}
-              <div className="p-6 border-t border-border bg-primary">
-                <UserMobileData />
-              </div>
+                {/* User Info */}
+                <div className="p-6 border-t border-none bg-primary">
+                  <UserMobileData />
+                </div>
+              </nav>
             </motion.aside>
           </>
         )}
