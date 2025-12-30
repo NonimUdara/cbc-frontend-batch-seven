@@ -78,7 +78,7 @@ export default function UserMobileData() {
           <span className="text-secondary font-medium">{user.firstName}</span>
 
           <select
-            className="bg-accent text-white px-2 py-1 rounded-md w-[100px] cursor-pointer"
+            className="bg-secondary text-white px-2 py-1 rounded-md w-[95px] cursor-pointer hover:bg-accent transition-colors"
             onChange={(e) => {
               const value = e.target.value;
 
@@ -86,9 +86,9 @@ export default function UserMobileData() {
                 window.location.href = "/settings";
               }
 
-              if (value === "orders") {
-                window.location.href = "/orders";
-              }
+              // if (value === "orders") {
+              //   window.location.href = "/orders";
+              // }
 
               if (value === "logout") {
                 setIsLogoutConfirmOpen(true);
@@ -98,10 +98,10 @@ export default function UserMobileData() {
             }}
           >
             <option value="" hidden>
-              Menu
+              Settings
             </option>
-            <option value="account">Account Settings</option>
-            <option value="orders">Orders</option>
+            <option value="account" >Account </option>
+            {/* <option value="orders">Orders</option> */}
             <option value="logout">Logout</option>
           </select>
         </div>

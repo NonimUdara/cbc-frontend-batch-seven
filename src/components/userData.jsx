@@ -90,12 +90,12 @@ export default function UserData() {
               >
                 <FaUserCog className="mr-2 w-4 h-4" /> Account Settings
               </button>
-              <button
+              {/* <button
                 onClick={() => (window.location.href = "/orders")}
                 className="flex items-center w-full px-4 py-2 text-sm hover:bg-accent hover:text-white transition-colors"
               >
                 <FaShoppingBag className="mr-2 w-4 h-4" /> Orders
-              </button>
+              </button> */}
               <button
                 onClick={handleLogout}
                 className="flex items-center w-full px-4 py-2 text-sm text-red-400 hover:bg-accent hover:text-white transition-colors"
