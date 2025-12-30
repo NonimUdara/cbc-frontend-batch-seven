@@ -1,68 +1,217 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 import { Loader } from "../components/loader";
 import ProductCard from "../components/productCard";
+import {
+  FaInstagram,
+  FaFacebookF,
+  FaTwitter,
+} from "react-icons/fa";
 
-export default function ProductPage() {
+export default function ProductPageView() {
   const [products, setProducts] = useState([]);
+  const [filtered, setFiltered] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (isLoading) {
-      axios
-        .get(import.meta.env.VITE_API_URL + "/api/products")
-        .then((response) => {
-          setProducts(response.data);
-          console.log("Products fetched:", response.data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.log("Error fetching products:", error);
-          setIsLoading(false);
-          toast.error("Error fetching products");
-        });
+    axios
+      .get(import.meta.env.VITE_API_URL + "/api/products")
+      .then((res) => {
+        setProducts(res.data);
+        setFiltered(res.data);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        toast.error("Failed to load products");
+        setIsLoading(false);
+      });
+  }, []);
+
+  const handleSearch = async (value) => {
+    if (!value) {
+      setFiltered(products);
+      return;
     }
-  }, [isLoading]);
+
+    try {
+      const res = await axios.get(
+        import.meta.env.VITE_API_URL + "/api/products/search/" + value
+      );
+      setFiltered(res.data);
+    } catch {
+      toast.error("Search failed");
+    }
+  };
+
+  const electronics = filtered.filter(p => p.category === "electronics");
+  const fashion = filtered.filter(p => p.category === "fashion");
+  const beauty = filtered.filter(p => p.category === "beauty");
 
   return (
-    <div className="w-full min-h-[calc(100vh-100px)] bg-primary">
-      <div className="w-full h-[100px] flex justify-center items-center">
-        <input
-          type="text"
-          onChange={async (e) => {
-            try {
-              if (e.target.value === "") {
-                setIsLoading(true);
-              } else {
-                
-                const searchResult = await axios.get(
-                  import.meta.env.VITE_API_URL +
-                    "/api/products/search/" +
-                    e.target.value
-                );
-                setProducts(searchResult.data);
-                // console.log("Search results:", searchResult.data);
+    <div className="w-full min-h-screen bg-primary text-secondary font-sans flex flex-col">
 
-              }
-            } catch (error) {
-              toast.error("Search failed");
-              console.error("Search error:", error);
-            }
-          }}
-          placeholder="Search"
-          className="w-[50%] h-[50px] border border-secondary/50 text-center rounded-md"
-        />
-      </div>
+      {/* Hero Section */}
+      <section className="relative h-[70vh] flex items-center justify-center text-center px-4">
+        <div className="absolute inset-0 bg-gradient-to-b from-secondary/60 to-secondary/80" />
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="relative z-10 max-w-3xl"
+        >
+          <h1 className="text-5xl sm:text-6xl font-bold text-primary drop-shadow-xl">
+            Our Products
+          </h1>
+          <p className="mt-6 text-lg sm:text-xl text-primary/90">
+            Thoughtfully curated products designed to elevate your lifestyle.
+          </p>
+
+          {/* Search */}
+          <input
+            type="text"
+            placeholder="Search products..."
+            onChange={(e) => handleSearch(e.target.value)}
+            className="mt-8 w-[90%] sm:w-[400px] h-[50px] rounded-xl border border-white/30 text-center bg-white/90 focus:outline-none focus:ring-2 focus:ring-accent"
+          />
+        </motion.div>
+      </section>
+
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="w-full h-full flex flex-row flex-wrap justify-center items-center bg-primary p-5 ">
-          {products.map((item) => {
-            return <ProductCard product={item} key={item.productID} />;
-          })}
+        <div className="py-20 space-y-28">
+
+          {/* Electronics */}
+          {electronics.length > 0 && (
+            <section className="max-w-6xl mx-auto px-4">
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-14"
+              >
+                <h2 className="text-4xl sm:text-5xl font-bold mb-4">
+                  Electronics
+                </h2>
+                <p className="text-muted max-w-2xl mx-auto text-lg">
+                  Innovative technology crafted for modern living.
+                </p>
+              </motion.div>
+
+              <div className="flex flex-wrap justify-center gap-10">
+                {electronics.map(item => (
+                  <motion.div
+                    key={item.productID}
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <ProductCard product={item} />
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Fashion */}
+          {fashion.length > 0 && (
+            <section className="max-w-6xl mx-auto px-4">
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-14"
+              >
+                <h2 className="text-4xl sm:text-5xl font-bold mb-4">
+                  Fashion
+                </h2>
+                <p className="text-muted max-w-2xl mx-auto text-lg">
+                  Timeless styles curated for confidence and comfort.
+                </p>
+              </motion.div>
+
+              <div className="flex flex-wrap justify-center gap-10">
+                {fashion.map(item => (
+                  <motion.div
+                    key={item.productID}
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <ProductCard product={item} />
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Beauty */}
+          {beauty.length > 0 && (
+            <section className="max-w-6xl mx-auto px-4">
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-14"
+              >
+                <h2 className="text-4xl sm:text-5xl font-bold mb-4">
+                  Beauty
+                </h2>
+                <p className="text-muted max-w-2xl mx-auto text-lg">
+                  Nourishing products to reveal your natural glow.
+                </p>
+              </motion.div>
+
+              <div className="flex flex-wrap justify-center gap-10">
+                {beauty.map(item => (
+                  <motion.div
+                    key={item.productID}
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <ProductCard product={item} />
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       )}
+
+      {/* Footer (Same as About & Home) */}
+      <footer className="bg-secondary text-primary py-16 px-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 text-center md:text-left gap-12">
+          <div className="flex flex-col items-center">
+            <h3 className="text-2xl font-bold mb-4">Crystal Beauty Clear</h3>
+            <p className="text-white/70 max-w-xs">
+              Premium skincare products designed to enhance your natural beauty.
+            </p>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <ul className="space-y-2">
+              <li><a href="/" className="hover:text-accent">Home</a></li>
+              <li><a href="/products" className="hover:text-accent">Products</a></li>
+              <li><a href="/about" className="hover:text-accent">About</a></li>
+              <li><a href="/contact" className="hover:text-accent">Contact</a></li>
+            </ul>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <h4 className="font-semibold mb-4">Follow Us</h4>
+            <div className="flex gap-4 text-xl">
+              <FaInstagram className="hover:text-accent cursor-pointer" />
+              <FaFacebookF className="hover:text-accent cursor-pointer" />
+              <FaTwitter className="hover:text-accent cursor-pointer" />
+            </div>
+          </div>
+        </div>
+
+        <p className="text-center text-white/60 mt-10 text-sm">
+          &copy; {new Date().getFullYear()} Crystal Beauty Clear. All rights reserved.
+        </p>
+      </footer>
     </div>
   );
 }
