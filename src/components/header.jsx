@@ -12,6 +12,7 @@ const navLinks = [
   { name: "Products", path: "/products" },
   { name: "About", path: "/about" },
   { name: "Contact", path: "/contact" },
+  { name: <BsCart3 className="text-2xl text-center" />, path: "/cart" },
 ];
 
 export default function Header() {
@@ -52,12 +53,12 @@ export default function Header() {
 
         {/* Desktop Actions */}
         <div className="hidden lg:flex items-center gap-6">
-          <Link
+          {/* <Link
             to="/cart"
             className="relative text-secondary hover:text-accent transition-colors"
           >
             <BsCart3 className="text-2xl" />
-          </Link>
+          </Link> */}
           <UserData />
         </div>
 
