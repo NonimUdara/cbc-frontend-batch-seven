@@ -9,7 +9,7 @@ export default function UserMobileData() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    if (token !== null) {
+    if (token) {
       axios
         .get(import.meta.env.VITE_API_URL + "/api/users/me", {
           headers: {
@@ -31,17 +31,18 @@ export default function UserMobileData() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center w-full">
+      {/* Logout Modal */}
       {isLogoutConfirmOpen && (
-        <div className="fixed z-[120] inset-0 bg-black/40 flex justify-center items-center">
-          <div className="w-[300px] bg-primary rounded-lg shadow-xl p-6 flex flex-col justify-center items-center gap-4 animate-fade-in">
+        <div className="fixed inset-0 z-[120] h-screen bg-black/40 flex justify-center items-center">
+          <div className="w-[300px] bg-primary rounded-lg p-6 flex flex-col items-center gap-4">
             <span className="text-secondary text-center font-medium">
               Are you sure you want to logout?
             </span>
 
-            <div className="flex gap-3 mt-3">
+            <div className="flex gap-3">
               <button
-                className="bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-all"
+                className="bg-accent text-white px-4 py-2 rounded-md"
                 onClick={() => {
                   localStorage.removeItem("token");
                   window.location.reload();
@@ -50,7 +51,7 @@ export default function UserMobileData() {
                 Logout
               </button>
               <button
-                className="bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-all"
+                className="bg-secondary text-white px-4 py-2 rounded-md"
                 onClick={() => setIsLogoutConfirmOpen(false)}
               >
                 Cancel
@@ -59,33 +60,55 @@ export default function UserMobileData() {
           </div>
         </div>
       )}
+
+      {/* Loading */}
       {loading && (
-        <div className="w-[30px] h-[30px] border-[3px] border-white border-b-transparent rounded-full animate-spin "></div>
+        <div className="w-[30px] h-[30px] border-[3px] border-accent border-b-transparent rounded-full animate-spin" />
       )}
-      {user && (
-        <div className="h-full w-full flex justify-center items-center ">
+
+      {/* Logged User */}
+      {user && !loading && (
+        <div className="flex items-center gap-2">
           <img
             src={user.image}
-            alt=""
-            className="w-[40px] h-[40px] rounded-full border-[2px] border-primary object-cover"
+            alt="user"
+            className="w-[40px] h-[40px] rounded-full border-2 border-primary object-cover"
           />
-          <span className="text-secondary ml-2">{user.firstName}</span>
+
+          <span className="text-secondary font-medium">{user.firstName}</span>
+
           <select
+            className="bg-accent text-white px-2 py-1 rounded-md w-[100px] cursor-pointer"
             onChange={(e) => {
-              if (e.target.value === "logout") {
+              const value = e.target.value;
+
+              if (value === "account") {
+                window.location.href = "/settings";
+              }
+
+              if (value === "orders") {
+                window.location.href = "/orders";
+              }
+
+              if (value === "logout") {
                 setIsLogoutConfirmOpen(true);
               }
+
+              e.target.value = ""; // reset dropdown
             }}
-            className="bg-accent text-white ml-2 max-w-[20px]"
           >
-            <option value="" className="hidden"></option>
-            <option value="">Account Settings</option>
-            <option value={"logout"}>Logout</option>
-            <option value="">Orders</option>
+            <option value="" hidden>
+              Menu
+            </option>
+            <option value="account">Account Settings</option>
+            <option value="orders">Orders</option>
+            <option value="logout">Logout</option>
           </select>
         </div>
       )}
-      {!loading && user === null && (
+
+      {/* Guest */}
+      {!loading && !user && (
         <button
           className="bg-accent text-white px-4 py-2 rounded-md"
           onClick={() => (window.location.href = "/login")}

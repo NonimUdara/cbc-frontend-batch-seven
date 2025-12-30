@@ -66,7 +66,7 @@ export default function UserData() {
             onClick={() => setMenuOpen(!menuOpen)}
           />
           <span
-            className="text-primary font-medium select-none"
+            className="text-secondary font-medium select-none"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             {user.firstName}

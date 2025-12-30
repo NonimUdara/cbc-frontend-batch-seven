@@ -1,106 +1,132 @@
+// Header.jsx
 import { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import { BsCart3 } from "react-icons/bs";
-import { MdMenu } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { MdMenu, MdClose } from "react-icons/md";
+import { motion, AnimatePresence } from "framer-motion";
 import UserData from "./userData";
 import UserMobileData from "./userDataMobile";
+
+const navLinks = [
+  { name: "Home", path: "/" },
+  { name: "Products", path: "/products" },
+  { name: "About", path: "/about" },
+  { name: "Contact", path: "/contact" },
+  { name: "Cart", path: "/cart" },
+];
 
 export default function Header() {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
+  const handleLinkClick = () => {
+    setIsSideBarOpen(false);
+  };
+
   return (
-    <header className="w-full bg-accent h-[100px] text-white px-[40px]">
-      <div className="w-full h-full flex items-center relative  ">
-        <img
-          src="/logo.png"
-          alt=""
-          className="hidden lg:block h-full absolute w-[170px] left-0 object-cover "
-        />
-        <div className="lg:hidden w-full flex justify-center relative items-center">
-          <MdMenu
-            className="absolute left-0 text-3xl"
-            onClick={() => setIsSideBarOpen(true)}
-          />
-          <img
-            src="/logo.png"
-            alt=""
-            className="h-full w-[170px] object-cover"
-          />
-        </div>
+    <header className="sticky top-0 z-50 bg-primary/95 backdrop-blur-md border-b border-border">
+      <div className="max-w-7xl mx-auto h-[80px] px-6 flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2">
+          <img src="/bg.jpg" alt="Crystal Beauty Clear" className="h-[60px] object-contain" />
+        </Link>
 
-        {isSideBarOpen && (
-          <div className="fixed top-0 left-0 h-screen w-full bg-black/50 text-secondary z-100">
-            <div className="w-[300px] bg-primary h-full flex flex-col">
-              <div className="lg:hidden w-full flex bg-accent justify-center relative items-center">
-                <MdMenu
-                  className="absolute left-2 text-white text-3xl"
-                  onClick={() => setIsSideBarOpen(false)}
-                />
-                <img
-                  src="/logo.png"
-                  alt=""
-                  className="h-[100px] w-[170px] object-cover"
-                />
-                {/* <a href="/cart" className="">
-                  <BsCart3 className="text-2xl" />
-                </a> */}
-              </div>
-              {/* <a className="p-4 border-b border-b-secondary/20 hover:bg-accent/20">
-                <UserData />
-              </a> */}
-              <a
-                href="/"
-                className="p-4 border-b border-b-secondary/20 hover:bg-accent/20"
-              >
-                Home
-              </a>
-              <a
-                href="/products"
-                className="p-4 border-b border-b-secondary/20 hover:bg-accent/20"
-              >
-                Products
-              </a>
-              <a
-                href="/about"
-                className="p-4 border-b border-b-secondary/20 hover:bg-accent/20"
-              >
-                About
-              </a>
-              <a
-                href="/contact"
-                className="p-4 border-b border-b-secondary/20 hover:bg-accent/20"
-              >
-                Contact
-              </a>
-              <a
-                href="/cart"
-                className="p-4 border-b border-b-secondary/20 hover:bg-accent/20"
-              >
-                Cart
-              </a>
-              <div className="w-[300px] absolute bottom-[20px] lg:hidden flex justify-center items-center gap-4">
-                <UserMobileData />
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Desktop Navigation */}
+        <nav className="hidden lg:flex items-center gap-10 text-secondary font-medium">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.name}
+              to={link.path}
+              className={({ isActive }) =>
+                `relative transition ${
+                  isActive ? "text-accent after:w-full" : "hover:text-accent"
+                } after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:bg-accent after:w-0 after:transition-all`
+              }
+            >
+              {link.name}
+            </NavLink>
+          ))}
+        </nav>
 
-        <div className="hidden h-full lg:flex justify-center items-center w-full text-lg gap-[20px]">
-          <Link to="/">Home</Link>
-          <Link to="/products">Products</Link>
-          <Link to="/about">About</Link>
-          <Link to="/contact">Contact</Link>
-        </div>
-        <div className="h-full w-[200px] absolute right-[100px] hidden lg:flex justify-end items-center">
+        {/* Desktop Actions */}
+        <div className="hidden lg:flex items-center gap-6">
+          <Link
+            to="/cart"
+            className="relative text-secondary hover:text-accent transition-colors"
+          >
+            <BsCart3 className="text-2xl" />
+          </Link>
           <UserData />
         </div>
-        <Link
-          className="hidden h-full lg:flex justify-center items-center absolute right-0 "
-          to="/cart"
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setIsSideBarOpen(true)}
+          className="lg:hidden text-secondary text-3xl hover:text-accent transition-colors align-middle"
         >
-          <BsCart3 className="text-3xl" />
-        </Link>
+          <MdMenu />
+        </button>
       </div>
+
+      {/* Mobile Sidebar */}
+      <AnimatePresence>
+        {isSideBarOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsSideBarOpen(false)}
+              className="fixed top-0 left-0 h-screen text-secondary z-100"
+            />
+
+            {/* Sidebar Panel */}
+            <motion.aside
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", duration: 0.3 }}
+              className="fixed top-0 right-0 h-screen w-80 bg-primary shadow-lg z-50 lg:hidden flex flex-col justify-between"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-border">
+                <Link to="/" className="flex items-center" onClick={handleLinkClick}>
+                  <img src="/bg.jpg" alt="Crystal Beauty Clear" className="h-[50px] object-contain" />
+                </Link>
+                <button
+                  onClick={() => setIsSideBarOpen(false)}
+                  className="text-secondary text-3xl hover:text-accent transition-colors"
+                >
+                  <MdClose />
+                </button>
+              </div>
+
+              {/* Links */}
+              <nav className="flex-1 flex flex-col overflow-y-auto p-6 gap-4">
+                {navLinks.map((link) => (
+                  <NavLink
+                    key={link.name}
+                    to={link.path}
+                    onClick={handleLinkClick}
+                    className={({ isActive }) =>
+                      `py-4 px-2 text-lg font-medium transition-colors border-b border-border ${
+                        isActive ? "text-accent" : "text-secondary hover:text-accent"
+                      }`
+                    }
+                  >
+                    {link.name}
+                  </NavLink>
+                ))}
+              </nav>
+
+              {/* User Info */}
+              <div className="p-6 border-t border-border bg-primary">
+                <UserMobileData />
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
