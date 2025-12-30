@@ -15,6 +15,11 @@ export default function ProductPageView() {
   const [filtered, setFiltered] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Normalize helper
+  const normalize = (value = "") =>
+    value.toString().trim().toLowerCase();
+
+  // Fetch all products ONCE
   useEffect(() => {
     axios
       .get(import.meta.env.VITE_API_URL + "/api/products")
@@ -29,30 +34,43 @@ export default function ProductPageView() {
       });
   }, []);
 
-  const handleSearch = async (value) => {
-    if (!value) {
+  // 🔥 SMART SEARCH (FIXED)
+  const handleSearch = (value) => {
+    const keyword = normalize(value);
+
+    if (!keyword) {
       setFiltered(products);
       return;
     }
 
-    try {
-      const res = await axios.get(
-        import.meta.env.VITE_API_URL + "/api/products/search/" + value
+    const result = products.filter((product) => {
+      return (
+        normalize(product.name).includes(keyword) ||
+        normalize(product.category).includes(keyword) ||
+        normalize(product.description).includes(keyword)
       );
-      setFiltered(res.data);
-    } catch {
-      toast.error("Search failed");
-    }
+    });
+
+    setFiltered(result);
   };
 
-  const electronics = filtered.filter(p => p.category === "electronics");
-  const fashion = filtered.filter(p => p.category === "fashion");
-  const beauty = filtered.filter(p => p.category === "beauty");
+  // Category grouping (SAFE)
+  const electronics = filtered.filter(
+    (p) => normalize(p.category) === "electronics"
+  );
+
+  const fashion = filtered.filter(
+    (p) => normalize(p.category) === "fashion"
+  );
+
+  const beauty = filtered.filter(
+    (p) => normalize(p.category) === "beauty"
+  );
 
   return (
     <div className="w-full min-h-screen bg-primary text-secondary font-sans flex flex-col">
 
-      {/* Hero Section */}
+      {/* Hero */}
       <section className="relative h-[70vh] flex items-center justify-center text-center px-4">
         <div className="absolute inset-0 bg-gradient-to-b from-secondary/60 to-secondary/80" />
         <motion.div
@@ -65,124 +83,69 @@ export default function ProductPageView() {
             Our Products
           </h1>
           <p className="mt-6 text-lg sm:text-xl text-primary/90">
-            Thoughtfully curated products designed to elevate your lifestyle.
+            Explore electronics, fashion & beauty collections.
           </p>
 
-          {/* Search */}
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder="Search products or categories..."
             onChange={(e) => handleSearch(e.target.value)}
             className="mt-8 w-[90%] sm:w-[400px] h-[50px] rounded-xl border border-white/30 text-center bg-white/90 focus:outline-none focus:ring-2 focus:ring-accent"
           />
         </motion.div>
       </section>
 
-      {isLoading ? (
-        <Loader />
-      ) : (
+      {isLoading && <Loader />}
+
+      {/* No Results */}
+      {!isLoading && filtered.length === 0 && (
+        <div className="py-24 text-center">
+          <h2 className="text-3xl font-semibold mb-4">
+            No products found
+          </h2>
+          <p className="text-muted">
+            Try searching by product name or category.
+          </p>
+        </div>
+      )}
+
+      {/* Products */}
+      {!isLoading && filtered.length > 0 && (
         <div className="py-20 space-y-28">
 
-          {/* Electronics */}
           {electronics.length > 0 && (
-            <section className="max-w-6xl mx-auto px-4">
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="text-center mb-14"
-              >
-                <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-                  Electronics
-                </h2>
-                <p className="text-muted max-w-2xl mx-auto text-lg">
-                  Innovative technology crafted for modern living.
-                </p>
-              </motion.div>
-
-              <div className="flex flex-wrap justify-center gap-10">
-                {electronics.map(item => (
-                  <motion.div
-                    key={item.productID}
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <ProductCard product={item} />
-                  </motion.div>
-                ))}
-              </div>
-            </section>
+            <CategorySection
+              title="Electronics"
+              desc="Innovative technology for modern living."
+              products={electronics}
+            />
           )}
 
-          {/* Fashion */}
           {fashion.length > 0 && (
-            <section className="max-w-6xl mx-auto px-4">
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="text-center mb-14"
-              >
-                <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-                  Fashion
-                </h2>
-                <p className="text-muted max-w-2xl mx-auto text-lg">
-                  Timeless styles curated for confidence and comfort.
-                </p>
-              </motion.div>
-
-              <div className="flex flex-wrap justify-center gap-10">
-                {fashion.map(item => (
-                  <motion.div
-                    key={item.productID}
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <ProductCard product={item} />
-                  </motion.div>
-                ))}
-              </div>
-            </section>
+            <CategorySection
+              title="Fashion"
+              desc="Timeless styles crafted for confidence."
+              products={fashion}
+            />
           )}
 
-          {/* Beauty */}
           {beauty.length > 0 && (
-            <section className="max-w-6xl mx-auto px-4">
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="text-center mb-14"
-              >
-                <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-                  Beauty
-                </h2>
-                <p className="text-muted max-w-2xl mx-auto text-lg">
-                  Nourishing products to reveal your natural glow.
-                </p>
-              </motion.div>
-
-              <div className="flex flex-wrap justify-center gap-10">
-                {beauty.map(item => (
-                  <motion.div
-                    key={item.productID}
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <ProductCard product={item} />
-                  </motion.div>
-                ))}
-              </div>
-            </section>
+            <CategorySection
+              title="Beauty"
+              desc="Nourish your glow with premium care."
+              products={beauty}
+            />
           )}
         </div>
       )}
 
-      {/* Footer (Same as About & Home) */}
+      {/* Footer */}
       <footer className="bg-secondary text-primary py-16 px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 text-center md:text-left gap-12">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
           <div className="flex flex-col items-center">
-            <h3 className="text-2xl font-bold mb-4">Crystal Beauty Clear</h3>
+            <h3 className="text-2xl font-bold mb-4">
+              Crystal Beauty Clear
+            </h3>
             <p className="text-white/70 max-w-xs">
               Premium skincare products designed to enhance your natural beauty.
             </p>
@@ -213,5 +176,39 @@ export default function ProductPageView() {
         </p>
       </footer>
     </div>
+  );
+}
+
+/* ---------------- Helper Components ---------------- */
+
+function CategorySection({ title, desc, products }) {
+  return (
+    <section className="max-w-6xl mx-auto px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="text-center mb-14"
+      >
+        <h2 className="text-4xl sm:text-5xl font-bold mb-4">
+          {title}
+        </h2>
+        <p className="text-muted max-w-2xl mx-auto text-lg">
+          {desc}
+        </p>
+      </motion.div>
+
+      <div className="flex flex-wrap justify-center gap-10">
+        {products.map((item) => (
+          <motion.div
+            key={item.productID}
+            whileHover={{ scale: 1.05 }}
+          >
+            <ProductCard product={item} />
+          </motion.div>
+        ))}
+      </div>
+    </section>
   );
 }
