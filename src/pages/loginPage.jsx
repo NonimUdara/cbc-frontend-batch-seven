@@ -74,7 +74,7 @@ export default function LoginPage() {
       <div className="relative z-10 w-full lg:w-1/2 flex justify-center items-center p-6 sm:p-10">
         <div className="w-full max-w-sm sm:max-w-md backdrop-blur-3xl bg-white/10 border border-white/20 shadow-2xl rounded-3xl p-6 sm:p-10 flex flex-col items-center gap-6 animate-fadeInUp">
           {/* Mobile logo */}
-          <img src="/logo.png" alt="CBC Logo" className="w-16 mb-2 lg:hidden" />
+          <img src="/logo.png" alt="CBC Logo" className="w-24 sm:w-28 lg:hidden drop-shadow-xl" />
 
           <h2 className="text-2xl sm:text-3xl font-bold text-white">Welcome Back</h2>
           <p className="text-sm sm:text-base text-gray-300 mb-4 text-center">Login to continue your journey</p>
