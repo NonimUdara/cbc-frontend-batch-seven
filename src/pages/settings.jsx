@@ -1,9 +1,9 @@
 import axios from "axios";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FiCamera } from "react-icons/fi";
-import mediaUpload from "../utils/mediaUpload";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import mediaUpload from "../utils/mediaUpload";
 
 export default function UserSettings() {
   const [firstName, setFirstName] = useState("");
@@ -13,246 +13,190 @@ export default function UserSettings() {
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [user, setUser] = useState(null);
-  const [passwordMatch, setPasswordMatch] = useState(true);
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  /* ---------------- FETCH USER ---------------- */
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (!token) {
-      window.location.href = "/login";
+      navigate("/login");
       return;
     }
 
     axios
       .get(import.meta.env.VITE_API_URL + "/api/users/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
         setFirstName(res.data.firstName);
         setLastName(res.data.lastName);
-        setUser(res.data);
         setPreview(res.data.image);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         localStorage.removeItem("token");
-        window.location.href = "/login";
+        navigate("/login");
       });
   }, []);
 
-  async function updateUserData() {
-    const data = {
-      firstName: firstName,
-      lastName: lastName,
-      image : user?.image || null
-    };
+  /* ---------------- UPDATE PROFILE ---------------- */
+  async function updateUserData(e) {
+  e.preventDefault();
 
-    if (image != null) {
-      const link = await mediaUpload(image);
-      data.image = link;
+  try {
+    let imageUrl = preview;
+
+    if (image) {
+      imageUrl = await mediaUpload(image);
     }
 
-    axios
-      .put(import.meta.env.VITE_API_URL + "/api/users/me", data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then((res) => {
-        alert("User data updated successfully");
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("Failed to update user data");
-      });
-      navigate("/");
-  }
+    const res = await axios.put(
+      import.meta.env.VITE_API_URL + "/api/users/me",
+      {
+        firstName,
+        lastName,
+        image: imageUrl,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
 
-  async function updatePassword() {
+    // ✅ UPDATE LOCAL STORAGE USER
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+
+    // ✅ FORCE UI UPDATE EVENT
+    window.dispatchEvent(new Event("userUpdated"));
+
+    toast.success("Profile updated successfully");
+
+    setTimeout(() => {
+      navigate("/");
+    }, 1200);
+  } catch (error) {
+    toast.error("Failed to update profile");
+  }
+}
+
+
+  /* ---------------- UPDATE PASSWORD ---------------- */
+  async function updatePassword(e) {
+    e.preventDefault();
+
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
     }
-    axios
-      .put(
+
+    try {
+      await axios.put(
         import.meta.env.VITE_API_URL + "/api/users/me/password",
-        {
-          password: password,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then(() => {
-        toast.success("Password updated successfully");
-        setPassword("");
-        setConfirmPassword("");
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("Failed to update password");
-      });
-      navigate("/");
+        { password },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      toast.success("Password updated successfully");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1200);
+    } catch {
+      toast.error("Failed to update password");
+    }
   }
 
+  /* ---------------- IMAGE PREVIEW ---------------- */
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      setPreview(URL.createObjectURL(file));
-    }
-  };
+    if (!file) return;
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-    setPasswordMatch(e.target.value === confirmPassword);
-  };
-
-  const handleConfirmPasswordChange = (e) => {
-    setConfirmPassword(e.target.value);
-    setPasswordMatch(password === e.target.value);
+    setImage(file);
+    setPreview(URL.createObjectURL(file));
   };
 
   return (
-    <div className="w-full min-h-screen bg-[url('/bg.jpg')] bg-cover bg-center bg-no-repeat flex flex-col lg:flex-row items-center justify-center gap-8 p-6">
-      {/* Left Panel — User Info */}
-      <div className="w-full lg:w-[40%] bg-[#FEF3E2]/90 backdrop-blur-lg rounded-2xl shadow-xl border border-[#FA812F]/30 p-8">
-        <h1 className="text-2xl font-bold text-[#393e46] text-center mb-6">
-          User Information
-        </h1>
+    <div className="min-h-screen w-full bg-gradient-to-br from-primary via-white to-accent flex items-center justify-center px-4 py-10">
+      <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* PROFILE CARD */}
+        <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8">
+          <h2 className="text-2xl font-bold text-secondary text-center mb-6">
+            Profile Settings
+          </h2>
 
-        {/* Profile Image Preview Section */}
-        <div className="flex flex-col items-center mb-6">
-          <div className="relative group">
-            <div className="w-32 h-32 rounded-full border-4 border-[#FA812F] shadow-lg overflow-hidden flex items-center justify-center bg-white">
-              {preview ? (
-                <img
-                  src={preview}
-                  alt="Profile"
-                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                />
-              ) : (
-                <span className="text-[#393e46]/70 text-sm">
-                  No Image Selected
-                </span>
-              )}
-            </div>
+          <div className="flex justify-center mb-6">
+            <label className="relative cursor-pointer group">
+              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-accent">
+                {preview ? (
+                  <img src={preview} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                    No Image
+                  </div>
+                )}
+              </div>
 
-            {/* Overlay for change photo */}
-            <label
-              htmlFor="profileImage"
-              className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity duration-300"
-            >
-              <FiCamera className="text-white w-6 h-6" />
-              <span className="ml-2 text-white font-medium">Change Photo</span>
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                <FiCamera className="text-white text-2xl" />
+              </div>
+
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={handleImageChange}
+              />
             </label>
-
-            <input
-              type="file"
-              id="profileImage"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="hidden"
-            />
           </div>
-        </div>
 
-        {/* User Info Form */}
-        <form onSubmit={updateUserData} className="flex flex-col gap-4">
-          <div>
-            <label className="block text-[#393e46] font-semibold mb-1">
-              First Name
-            </label>
+          <form onSubmit={updateUserData} className="space-y-4">
             <input
-              type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              placeholder="Enter your first name"
-              className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FA812F] outline-none"
+              placeholder="First Name"
+              className="w-full h-12 px-4 rounded-lg border focus:ring-2 focus:ring-accent"
             />
-          </div>
 
-          <div>
-            <label className="block text-[#393e46] font-semibold mb-1">
-              Last Name
-            </label>
             <input
-              type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              placeholder="Enter your last name"
-              className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FA812F] outline-none"
+              placeholder="Last Name"
+              className="w-full h-12 px-4 rounded-lg border focus:ring-2 focus:ring-accent"
             />
-          </div>
 
-          <button
-            type="submit"
-            className="mt-4 bg-[#FA812F] text-white font-semibold py-2 rounded-lg hover:bg-orange-500 transition-all duration-300"
-          >
-            Update Information
-          </button>
-        </form>
-      </div>
+            <button className="w-full h-12 bg-accent text-white rounded-lg font-semibold hover:opacity-90">
+              Save Changes
+            </button>
+          </form>
+        </div>
 
-      {/* Right Panel — Password Change */}
-      <div className="w-full lg:w-[40%] bg-[#FEF3E2]/90 backdrop-blur-lg rounded-2xl shadow-xl border border-[#FA812F]/30 p-8">
-        <h1 className="text-2xl font-bold text-[#393e46] text-center mb-6">
-          Change Password
-        </h1>
+        {/* PASSWORD CARD */}
+        <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 flex flex-col justify-center">
+          <h2 className="text-2xl font-bold text-secondary text-center mb-6">
+            Change Password
+          </h2>
 
-        <form onSubmit={updatePassword} className="flex flex-col gap-4">
-          <div>
-            <label className="block text-[#393e46] font-semibold mb-1">
-              New Password
-            </label>
+          <form onSubmit={updatePassword} className="space-y-4">
             <input
               type="password"
               value={password}
-              onChange={handlePasswordChange}
-              placeholder="Enter new password"
-              className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FA812F] outline-none"
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="New Password"
+              className="w-full h-12 px-4 rounded-lg border focus:ring-2 focus:ring-accent"
             />
-          </div>
 
-          <div>
-            <label className="block text-[#393e46] font-semibold mb-1">
-              Confirm Password
-            </label>
             <input
               type="password"
               value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
-              placeholder="Confirm new password"
-              className={`w-full p-3 rounded-lg border ${
-                passwordMatch ? "border-gray-300" : "border-red-500"
-              } focus:ring-2 focus:ring-[#FA812F] outline-none`}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm Password"
+              className="w-full h-12 px-4 rounded-lg border focus:ring-2 focus:ring-accent"
             />
-            {!passwordMatch && (
-              <p className="text-red-500 text-sm mt-1">
-                Passwords do not match
-              </p>
-            )}
-          </div>
 
-          <button
-            type="submit"
-            disabled={!passwordMatch || password === ""}
-            className={`mt-4 font-semibold py-2 rounded-lg transition-all duration-300 ${
-              passwordMatch && password !== ""
-                ? "bg-[#FA812F] text-white hover:bg-orange-500"
-                : "bg-gray-300 text-gray-600 cursor-not-allowed"
-            }`}
-          >
-            Update Password
-          </button>
-        </form>
+            <button className="w-full h-12 bg-secondary text-white rounded-lg font-semibold hover:opacity-90">
+              Update Password
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
