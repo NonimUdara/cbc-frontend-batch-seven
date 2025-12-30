@@ -235,8 +235,8 @@ export default function HomePageView() {
                 </a>
               </li>
               <li>
-                <a href="#features" className="hover:text-accent transition">
-                  Features
+                <a href="/about" className="hover:text-accent transition">
+                  About
                 </a>
               </li>
               <li>
