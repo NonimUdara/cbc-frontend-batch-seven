@@ -27,9 +27,17 @@ export default function RegisterPage() {
       navigate("/login");
     } catch (e) {
       console.error("Registration failed:", e);
-      toast.error(
-        "Registration failed. Please check your credentials and try again."
-      );
+
+      // Check if backend returned 409 for existing email
+      if (e.response && e.response.status === 409) {
+        toast.error(
+          e.response.data.message || "User with this email already exists."
+        );
+      } else {
+        toast.error(
+          "Registration failed. Please check your credentials and try again."
+        );
+      }
     }
   }
 
