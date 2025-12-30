@@ -19,7 +19,7 @@ const sliderImages = [
   "/Home3.jpg",
 ];
 
-export default function HomePage() {
+export default function HomePageView() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
