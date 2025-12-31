@@ -4,11 +4,7 @@ import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { Loader } from "../components/loader";
 import ProductCard from "../components/productCard";
-import {
-  FaInstagram,
-  FaFacebookF,
-  FaTwitter,
-} from "react-icons/fa";
+import { FaInstagram, FaFacebookF, FaTwitter } from "react-icons/fa";
 
 export default function ProductPageView() {
   const [products, setProducts] = useState([]);
@@ -16,8 +12,7 @@ export default function ProductPageView() {
   const [isLoading, setIsLoading] = useState(true);
 
   // Normalize helper
-  const normalize = (value = "") =>
-    value.toString().trim().toLowerCase();
+  const normalize = (value = "") => value.toString().trim().toLowerCase();
 
   // Fetch all products ONCE
   useEffect(() => {
@@ -59,17 +54,12 @@ export default function ProductPageView() {
     (p) => normalize(p.category) === "electronics"
   );
 
-  const fashion = filtered.filter(
-    (p) => normalize(p.category) === "fashion"
-  );
+  const fashion = filtered.filter((p) => normalize(p.category) === "fashion");
 
-  const beauty = filtered.filter(
-    (p) => normalize(p.category) === "beauty"
-  );
+  const beauty = filtered.filter((p) => normalize(p.category) === "beauty");
 
   return (
     <div className="w-full min-h-screen bg-primary text-secondary font-sans flex flex-col">
-
       {/* Hero */}
       <section className="relative h-[70vh] flex items-center justify-center text-center px-4">
         <div className="absolute inset-0 bg-gradient-to-b from-secondary/60 to-secondary/80" />
@@ -100,9 +90,7 @@ export default function ProductPageView() {
       {/* No Results */}
       {!isLoading && filtered.length === 0 && (
         <div className="py-24 text-center">
-          <h2 className="text-3xl font-semibold mb-4">
-            No products found
-          </h2>
+          <h2 className="text-3xl font-semibold mb-4">No products found</h2>
           <p className="text-muted">
             Try searching by product name or category.
           </p>
@@ -112,7 +100,6 @@ export default function ProductPageView() {
       {/* Products */}
       {!isLoading && filtered.length > 0 && (
         <div className="py-20 space-y-28">
-
           {beauty.length > 0 && (
             <CategorySection
               title="Beauty"
@@ -136,7 +123,6 @@ export default function ProductPageView() {
               products={electronics}
             />
           )}
-
         </div>
       )}
 
@@ -144,9 +130,7 @@ export default function ProductPageView() {
       <footer className="bg-secondary text-primary py-16 px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
           <div className="flex flex-col items-center">
-            <h3 className="text-2xl font-bold mb-4">
-              Crystal Beauty Clear
-            </h3>
+            <h3 className="text-2xl font-bold mb-4">Crystal Beauty Clear</h3>
             <p className="text-white/70 max-w-xs">
               Premium skincare products designed to enhance your natural beauty.
             </p>
@@ -155,10 +139,26 @@ export default function ProductPageView() {
           <div className="flex flex-col items-center">
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              <li><a href="/" className="hover:text-accent">Home</a></li>
-              <li><a href="/products" className="hover:text-accent">Products</a></li>
-              <li><a href="/about" className="hover:text-accent">About</a></li>
-              <li><a href="/contact" className="hover:text-accent">Contact</a></li>
+              <li>
+                <a href="/" className="hover:text-accent">
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="/products" className="hover:text-accent">
+                  Products
+                </a>
+              </li>
+              <li>
+                <a href="/about" className="hover:text-accent">
+                  About
+                </a>
+              </li>
+              <li>
+                <a href="/contact" className="hover:text-accent">
+                  Contact
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -173,7 +173,8 @@ export default function ProductPageView() {
         </div>
 
         <p className="text-center text-white/60 mt-10 text-sm">
-          &copy; {new Date().getFullYear()} Crystal Beauty Clear. All rights reserved.
+          &copy; {new Date().getFullYear()} Crystal Beauty Clear. All rights
+          reserved.
         </p>
       </footer>
     </div>
@@ -184,27 +185,35 @@ export default function ProductPageView() {
 
 function CategorySection({ title, desc, products }) {
   return (
-    <section className="max-w-6xl mx-auto px-4">
+    <section className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Section Heading */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="text-center mb-14"
       >
-        <h2 className="text-4xl sm:text-5xl font-bold mb-4">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
           {title}
         </h2>
-        <p className="text-muted max-w-2xl mx-auto text-lg">
+        <p className="text-muted max-w-2xl mx-auto text-base sm:text-lg">
           {desc}
         </p>
       </motion.div>
 
-      <div className="flex flex-wrap justify-center gap-10">
+      {/* Products Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {products.map((item) => (
           <motion.div
             key={item.productID}
             whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={
+              products.length === 1
+                ? "col-span-full flex justify-center"
+                : "flex justify-center"
+            }
           >
             <ProductCard product={item} />
           </motion.div>
