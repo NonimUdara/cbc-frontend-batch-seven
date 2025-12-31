@@ -113,11 +113,11 @@ export default function ProductPageView() {
       {!isLoading && filtered.length > 0 && (
         <div className="py-20 space-y-28">
 
-          {electronics.length > 0 && (
+          {beauty.length > 0 && (
             <CategorySection
-              title="Electronics"
-              desc="Innovative technology for modern living."
-              products={electronics}
+              title="Beauty"
+              desc="Nourish your glow with premium care."
+              products={beauty}
             />
           )}
 
@@ -129,13 +129,14 @@ export default function ProductPageView() {
             />
           )}
 
-          {beauty.length > 0 && (
+          {electronics.length > 0 && (
             <CategorySection
-              title="Beauty"
-              desc="Nourish your glow with premium care."
-              products={beauty}
+              title="Electronics"
+              desc="Innovative technology for modern living."
+              products={electronics}
             />
           )}
+
         </div>
       )}
 
