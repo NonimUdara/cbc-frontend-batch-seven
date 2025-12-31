@@ -104,7 +104,7 @@ export default function AdminPage() {
             <Loader />
           ) : (
             <Routes>
-              <Route path="/" element={<h1 className="text-2xl font-bold">Dashboard</h1>} />
+              <Route path="/" element={<AdminDashboardPage />} />
               <Route path="/orders" element={<AdminOrdersPage />} />
               <Route path="/products" element={<AdminProductPage />} />
               <Route path="/add-product" element={<AdminAddnewProduct />} />
