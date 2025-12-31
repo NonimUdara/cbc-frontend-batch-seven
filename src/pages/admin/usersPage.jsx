@@ -140,7 +140,7 @@ export default function AdminUsersPage() {
                         ].map((h, idx) => (
                           <th
                             key={idx}
-                            className="p-4 text-secondary font-semibold text-sm text-center"
+                            className="px-4 py-3 text-sm font-semibold text-secondary"
                           >
                             {h}
                           </th>
@@ -160,7 +160,7 @@ export default function AdminUsersPage() {
                               src={user.image}
                               referrerPolicy="no-referrer"
                               alt={user.firstName}
-                              className={`inline-block w-14 h-14 rounded-full object-cover border-4 ${
+                              className={`w-12 h-12 rounded-full object-cover border-4 ${
                                 user.isBlock
                                   ? "border-red-600"
                                   : "border-green-600"
@@ -168,19 +168,19 @@ export default function AdminUsersPage() {
                             />
                           </td>
 
-                          <td className="p-4 text-sm text-center flex items-center justify-center gap-2">
+                          <td className="px-4 py-3 flex items-center gap-2">
                             {user.email}
                             {user.isEmailVerified && (
                               <MdVerified className="text-blue-500 text-lg" />
                             )}
                           </td>
-                          <td className="p-4 text-gray-800 font-medium text-center">
+                          <td className="px-4 py-3">
                             {user.firstName}
                           </td>
-                          <td className="p-4 text-gray-700 text-sm text-center">
+                          <td className="px-4 py-3">
                             {user.lastName}
                           </td>
-                          <td className="p-4 text-gray-700 text-sm text-center">
+                          <td className="px-4 py-3 flex items-center">
                             <div className="flex items-center justify-center gap-2">
                               {user.role === "admin" && (
                                 <MdOutlineAdminPanelSettings className="text-purple-600 text-lg" />
@@ -188,7 +188,7 @@ export default function AdminUsersPage() {
                               <span className="capitalize">{user.role}</span>
                             </div>
                           </td>
-                          <td className="p-4 text-center">
+                          <td className="px-4 py-3">
                             <button
                               onClick={() => {
                                 setUserToBlock(user);
