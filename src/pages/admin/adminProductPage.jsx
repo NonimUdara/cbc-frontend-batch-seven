@@ -1,67 +1,11 @@
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { CiCirclePlus } from "react-icons/ci";
-import { FaRegEdit } from "react-icons/fa";
-import { IoTrashOutline } from "react-icons/io5";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Loader } from "../../components/loader";
-
-function ProductDeleteConfirm(props) {
-  const productID = props.productID;
-  const close = props.close;
-  const refresh = props.refresh;
-  function deleteProduct() {
-    const token = localStorage.getItem("token");
-
-    axios
-      .delete(import.meta.env.VITE_API_URL + "/api/products/" + productID, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        console.log("Product deleted:", response.data);
-        close();
-        toast.success("Product deleted successfully");
-        refresh();
-        // window.location.reload();
-      })
-      .catch(() => {
-        toast.error("Error deleting product");
-      });
-  }
-
-  return (
-    <div className="fixed left-0 top-0 w-full h-screen bg-[#00000050] z-[100] flex justify-center items-center">
-      <div className="w-[500px] h-[200px] bg-primary rounded-lg shadow-lg p-6 relative flex flex-col justify-center items-center gap-[10px">
-        <button
-          onClick={close}
-          className="absolute right-[-40px] w-[42px] top-[-42px] h-[40px] rounded-full bg-red-600 font-bold text-white border border-red-600 hover:bg-white hover:text-red-600"
-        >
-          X
-        </button>
-        <p className="text-xl font-semibold">
-          Are you sure you want to delete product {productID} ?
-          <div className="flex gap-6 justify-center mt-6">
-            <button
-              onClick={deleteProduct}
-              className="w-[100px] bg-red-600 p-[5px] text-white hover:bg-accent hover:text-black  "
-            >
-              Delete
-            </button>
-            <button
-              onClick={close}
-              className="w-[100px] bg-blue-600 p-[5px] text-white hover:bg-accent hover:text-black "
-            >
-              Cancel
-            </button>
-          </div>
-        </p>
-      </div>
-    </div>
-  );
-}
+import { CiCirclePlus } from "react-icons/ci";
+import { IoTrashOutline } from "react-icons/io5";
+import { FaRegEdit } from "react-icons/fa";
 
 export default function AdminProductPage() {
   const [products, setProducts] = useState([]);
@@ -71,149 +15,221 @@ export default function AdminProductPage() {
 
   const navigate = useNavigate();
 
+  const fetchProducts = useCallback(() => {
+    setIsLoading(true);
+    axios
+      .get(import.meta.env.VITE_API_URL + "/api/products")
+      .then((res) => {
+        setProducts(res.data);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        toast.error("Failed to fetch products");
+        setIsLoading(false);
+      });
+  }, []);
+
   useEffect(() => {
-    if (isLoading) {
-      axios
-        .get(import.meta.env.VITE_API_URL + "/api/products")
-        .then((response) => {
-          console.log("Products fetched:", response.data);
-          setProducts(response.data);
-          setIsLoading(false);
-        })
-        .catch((error) => console.error("Error fetching products:", error));
-    }
-  }, [isLoading]);
+    fetchProducts();
+  }, [fetchProducts]);
 
   return (
-    <div className="w-full h-full p-6 bg-primary min-h-screen flex justify-center">
-      {
-        // if isDeleteConfirmVisible is true, show the ProductDeleteConfirm component
-        isDeleteConfirmVisible && (
-          <ProductDeleteConfirm
-            refresh={() => {
-              setIsLoading(true);
-            }}
-            productID={productToDelete}
-            close={() => {
-              setIsDeleteConfirmVisible(false);
-            }}
-          />
-        )
-      }
-      <Link
-        to="/admin/add-product"
-        className="fixed right-[50px] bottom-[50px] text-5xl hover:text-accent px-4"
-      >
-        <CiCirclePlus />
-      </Link>
-      <div className="w-full max-w-7xl h-[97%] bg-white rounded-2xl shadow-xl p-4">
-        {/* Header with count */}
-        <div className="flex items-center justify-between mb-6 border-b pb-3">
-          <h1 className="text-2xl font-bold text-secondary">
-            Products Management
-          </h1>
-          <span className="text-sm text-gray-600 bg-primary px-4 py-1 rounded-full">
-            Total:{" "}
-            <span className="font-semibold text-secondary">
-              {products.length}
-            </span>
-          </span>
+    <>
+      {/* ---------------- DELETE CONFIRM POPUP ---------------- */}
+      {isDeleteConfirmVisible && (
+        <div className="fixed left-0 top-0 w-full h-screen bg-[#00000050] z-[100] flex justify-center items-center">
+          <div className="w-[500px] h-[200px] bg-white rounded-lg shadow-lg p-6 relative flex flex-col justify-center items-center gap-[10px]">
+            <button
+              onClick={() => setIsDeleteConfirmVisible(false)}
+              className="absolute right-[-40px] w-[42px] top-[-42px] h-[40px] rounded-full bg-red-600 font-bold text-white border border-red-600 hover:bg-white hover:text-red-600"
+            >
+              X
+            </button>
+            <p className="text-xl font-semibold text-center">
+              Are you sure you want to delete product {productToDelete}?
+            </p>
+            <div className="flex gap-6 justify-center mt-6">
+              <button
+                onClick={async () => {
+                  try {
+                    const token = localStorage.getItem("token");
+                    await axios.delete(
+                      `${import.meta.env.VITE_API_URL}/api/products/${productToDelete}`,
+                      { headers: { Authorization: `Bearer ${token}` } }
+                    );
+                    toast.success("Product deleted successfully");
+                    setIsDeleteConfirmVisible(false);
+                    fetchProducts();
+                  } catch (error) {
+                    toast.error(
+                      error?.response?.data?.message || "Failed to delete product"
+                    );
+                  }
+                }}
+                className="w-[100px] bg-red-600 p-[5px] text-white hover:bg-accent hover:text-black"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => setIsDeleteConfirmVisible(false)}
+                className="w-[100px] bg-blue-600 p-[5px] text-white hover:bg-accent hover:text-black"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ---------------- MAIN CONTAINER ---------------- */}
+      <div className="w-full h-full flex flex-col gap-6 overflow-hidden">
+        {/* ---------------- ADD PRODUCT BUTTON ---------------- */}
+        <Link
+          to="/admin/add-product"
+          className="fixed bottom-8 right-8 text-5xl text-secondary hover:text-accent transition z-50"
+        >
+          <CiCirclePlus />
+        </Link>
+
+        {/* ---------------- HEADER ---------------- */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <h1 className="text-2xl font-bold text-secondary">Products Management</h1>
+          <div className="bg-primary px-4 py-1 rounded-full text-sm">
+            Total Products:{" "}
+            <span className="font-semibold text-secondary">{products.length}</span>
+          </div>
         </div>
 
-        {/* Table container */}
-        <div className="overflow-auto rounded-lg border border-gray-200">
-          {isLoading ? (
-            <div className="flex justify-center items-center">
+        {/* ---------------- CONTENT AREA (SCROLLABLE) ---------------- */}
+        <div className="flex-1 overflow-y-auto pr-1">
+          {/* LOADER */}
+          {isLoading && (
+            <div className="flex justify-center items-center h-64">
               <Loader />
             </div>
-          ) : (
-            <table className="w-full text-left border-collapse">
-              <thead className="bg-primary sticky top-0 z-10">
-                <tr>
-                  {[
-                    "Image",
-                    "Product ID",
-                    "Product Name",
-                    "Price",
-                    "Labled Price",
-                    "Category",
-                    "Stock",
-                    "Actions",
-                  ].map((heading, index) => (
-                    <th
-                      key={index}
-                      className="p-4 text-secondary font-semibold text-sm uppercase border-b"
+          )}
+
+          {/* ---------------- DESKTOP TABLE ---------------- */}
+          {!isLoading && (
+            <div className="hidden lg:block bg-white rounded-xl shadow-lg border overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead className="bg-primary sticky top-0 z-10">
+                    <tr>
+                      {[
+                        "Image",
+                        "Product ID",
+                        "Name",
+                        "Price",
+                        "Label Price",
+                        "Category",
+                        "Stock",
+                        "Actions",
+                      ].map((h) => (
+                        <th
+                          key={h}
+                          className="px-4 py-3 text-sm font-semibold text-secondary"
+                        >
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products.map((item, index) => (
+                      <tr
+                        key={index}
+                        className={`hover:bg-[#FEF9F4] transition cursor-pointer ${
+                          index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                        }`}
+                      >
+                        <td className="px-4 py-3">
+                          <img
+                            src={item.images?.[0]}
+                            alt={item.name}
+                            className="w-12 h-12 rounded-md object-cover border"
+                          />
+                        </td>
+                        <td className="px-4 py-3">{item.productID}</td>
+                        <td className="px-4 py-3 font-medium">{item.name}</td>
+                        <td className="px-4 py-3">${item.price}</td>
+                        <td className="px-4 py-3">${item.labledPrice}</td>
+                        <td className="px-4 py-3">{item.category}</td>
+                        <td className="px-4 py-3">{item.stock}</td>
+                        <td className="px-4 py-3 flex gap-4">
+                          <button
+                            onClick={() => {
+                              setProductToDelete(item.productID);
+                              setIsDeleteConfirmVisible(true);
+                            }}
+                            className="p-2 rounded-full hover:bg-red-50 text-gray-600 hover:text-red-600 transition"
+                          >
+                            <IoTrashOutline size={18} />
+                          </button>
+                          <button
+                            onClick={() =>
+                              navigate("/admin/update-product", { state: item })
+                            }
+                            className="p-2 rounded-full hover:bg-primary text-gray-600 hover:text-accent transition"
+                          >
+                            <FaRegEdit size={18} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* ---------------- MOBILE CARDS ---------------- */}
+          {!isLoading && (
+            <div className="grid grid-cols-1 gap-4 lg:hidden">
+              {products.map((item, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-xl shadow-md border p-4 transition"
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-semibold text-secondary">{item.name}</span>
+                    <span className="text-xs bg-accent/20 text-accent px-2 py-1 rounded-full">
+                      Stock: {item.stock}
+                    </span>
+                  </div>
+
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <p><b>Product ID:</b> {item.productID}</p>
+                    <p><b>Price:</b> ${item.price}</p>
+                    <p><b>Label Price:</b> ${item.labledPrice}</p>
+                    <p><b>Category:</b> {item.category}</p>
+                  </div>
+
+                  <div className="flex gap-4 mt-3 justify-end">
+                    <button
+                      onClick={() => {
+                        setProductToDelete(item.productID);
+                        setIsDeleteConfirmVisible(true);
+                      }}
+                      className="p-2 rounded-full hover:bg-red-50 text-gray-600 hover:text-red-600 transition"
                     >
-                      {heading}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((item, index) => (
-                  <tr
-                    key={index}
-                    className={`transition-colors duration-300 hover:bg-[#FEF9F4] ${
-                      index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                    }`}
-                  >
-                    <td className="p-4 border-b">
-                      <img
-                        src={item.images[0]}
-                        alt={item.name}
-                        className="w-14 h-14 rounded-md object-cover border border-gray-200 shadow-sm"
-                      />
-                    </td>
-                    <td className="p-4 border-b text-gray-700 text-sm">
-                      {item.productID}
-                    </td>
-                    <td className="p-4 border-b text-gray-800 font-medium">
-                      {item.name}
-                    </td>
-                    <td className="p-4 border-b text-gray-700 text-sm">
-                      ${item.price}
-                    </td>
-                    <td className="p-4 border-b text-gray-700 text-sm">
-                      ${item.labledPrice}
-                    </td>
-                    <td className="p-4 border-b text-gray-700 text-sm">
-                      {item.category}
-                    </td>
-                    <td className="p-4 border-b text-gray-700 text-sm">
-                      {item.stock}
-                    </td>
-                    <td className="p-4 border-b">
-                      <div className="flex gap-3 justify-center">
-                        <button
-                          className="p-2 rounded-full hover:bg-red-50 text-gray-600 hover:text-red-600 transition"
-                          title="Delete"
-                          onClick={() => {
-                            setProductToDelete(item.productID);
-                            setIsDeleteConfirmVisible(true);
-                          }}
-                        >
-                          <IoTrashOutline size={18} />
-                        </button>
-                        <button
-                          className="p-2 rounded-full hover:bg-primary text-gray-600 hover:text-accent transition"
-                          title="Edit"
-                          onClick={() =>
-                            navigate("/admin/update-product", {
-                              state: item,
-                            })
-                          }
-                        >
-                          <FaRegEdit size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      <IoTrashOutline size={18} />
+                    </button>
+                    <button
+                      onClick={() =>
+                        navigate("/admin/update-product", { state: item })
+                      }
+                      className="p-2 rounded-full hover:bg-primary text-gray-600 hover:text-accent transition"
+                    >
+                      <FaRegEdit size={18} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
