@@ -86,7 +86,7 @@ export default function HomePageView() {
         <h2 className="text-4xl sm:text-5xl font-bold mb-12 text-secondary text-center">
           Why Choose Us
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-20 justify-items-center">
           {[
             {
               icon: <FaLeaf className="text-accent w-14 h-14 mb-4" />,
