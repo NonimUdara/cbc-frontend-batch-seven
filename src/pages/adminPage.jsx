@@ -120,11 +120,10 @@
 // }
 
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import { FaChartLine } from "react-icons/fa";
-import { MdShoppingCartCheckout } from "react-icons/md";
+import { FaChartLine, FaSignOutAlt } from "react-icons/fa";
+import { MdShoppingCartCheckout, MdMenu, MdClose } from "react-icons/md";
 import { BsBox2Heart } from "react-icons/bs";
 import { PiUsersThreeLight } from "react-icons/pi";
-import { MdMenu, MdClose } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -171,6 +170,13 @@ export default function AdminPage() {
       });
   }, []);
 
+  /* ---------------- LOGOUT ---------------- */
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    toast.success("Logged out successfully");
+    navigate("/login");
+  };
+
   /* ---------------- SIDEBAR MENU ---------------- */
   const SidebarMenu = () => (
     <nav className="flex flex-col gap-2 mt-4">
@@ -205,6 +211,14 @@ export default function AdminPage() {
       >
         <PiUsersThreeLight /> Users
       </Link>
+
+      {/* Logout */}
+      <button
+        onClick={handleLogout}
+        className="flex items-center gap-3 px-4 py-2 mt-4 rounded-lg bg-red-600 text-white hover:bg-red-500 transition"
+      >
+        <FaSignOutAlt /> Logout
+      </button>
     </nav>
   );
 
@@ -257,4 +271,3 @@ export default function AdminPage() {
     </div>
   );
 }
-
