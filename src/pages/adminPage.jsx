@@ -13,6 +13,7 @@ import AdminUpdateProduct from "./admin/adminUpdateProduct";
 import AdminOrdersPage from "./admin/adminOrdersPage";
 import AdminUsersPage from "./admin/usersPage";
 import { Loader } from "../components/loader";
+import AdminDashboardPage from "./admin/adminDashboardPage";
 
 export default function AdminPage() {
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ export default function AdminPage() {
         {/* Menu */}
         <nav className="flex flex-col gap-2 mt-4">
           <Link
-            to="/admin"
+            to="/admin/dashboard"
             className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-accent hover:text-white transition"
           >
             <FaChartLine /> Dashboard
@@ -109,6 +110,7 @@ export default function AdminPage() {
               <Route path="/add-product" element={<AdminAddnewProduct />} />
               <Route path="/update-product" element={<AdminUpdateProduct />} />
               <Route path="/users" element={<AdminUsersPage />} />
+              <Route path="/dashboard" element={<AdminDashboardPage />} />
             </Routes>
           )}
         </div>
