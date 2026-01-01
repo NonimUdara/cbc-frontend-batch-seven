@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { FiArrowLeft } from "react-icons/fi";
 
 export default function ForgotPassword() {
   const [step, setStep] = useState("email");
@@ -60,79 +61,93 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-primary via-white to-accent px-4">
-      <div className="w-full max-w-md backdrop-blur-xl bg-white/70 border border-white/40 rounded-2xl shadow-2xl p-8">
-        <h1 className="text-3xl font-bold text-secondary text-center">
-          Forgot Password
-        </h1>
-        <p className="text-sm text-gray-600 text-center mt-2">
-          {step === "email"
-            ? "Enter your email to receive an OTP"
-            : "Verify OTP & set a new password"}
-        </p>
+    <div className="min-h-screen w-full bg-gradient-to-br from-primary via-white to-accent flex items-center justify-center px-4 py-10">
+      <div className="max-w-md w-full">
 
-        {/* EMAIL STEP */}
-        {step === "email" && (
-          <div className="mt-8 space-y-5">
-            <input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:outline-none focus:ring-2 focus:ring-accent"
-            />
+        {/* BACK TO LOGIN (OUTSIDE CARD) */}
+        <button
+          onClick={() => navigate("/login")}
+          className="flex items-center gap-2 mb-6 text-secondary hover:text-accent transition font-medium"
+        >
+          <FiArrowLeft className="text-lg" />
+          Back to Login
+        </button>
 
-            <button
-              onClick={sendOTP}
-              className="w-full h-12 rounded-lg bg-accent text-white font-semibold hover:opacity-90 transition"
-            >
-              Send OTP
-            </button>
-          </div>
-        )}
+        {/* CARD */}
+        <div className="backdrop-blur-xl bg-white/70 border border-white/40 rounded-2xl shadow-2xl p-8">
+          <h1 className="text-3xl font-bold text-secondary text-center">
+            Forgot Password
+          </h1>
 
-        {/* OTP STEP */}
-        {step === "otp" && (
-          <div className="mt-8 space-y-4">
-            <input
-              type="text"
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:outline-none focus:ring-2 focus:ring-accent"
-            />
+          <p className="text-sm text-gray-600 text-center mt-2">
+            {step === "email"
+              ? "Enter your email to receive an OTP"
+              : "Verify OTP & set a new password"}
+          </p>
 
-            <input
-              type="password"
-              placeholder="New password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:outline-none focus:ring-2 focus:ring-accent"
-            />
+          {/* EMAIL STEP */}
+          {step === "email" && (
+            <div className="mt-8 space-y-5">
+              <input
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:outline-none focus:ring-2 focus:ring-accent"
+              />
 
-            <input
-              type="password"
-              placeholder="Confirm new password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:outline-none focus:ring-2 focus:ring-accent"
-            />
+              <button
+                onClick={sendOTP}
+                className="w-full h-12 rounded-lg bg-accent text-white font-semibold hover:opacity-90 transition"
+              >
+                Send OTP
+              </button>
+            </div>
+          )}
 
-            <button
-              onClick={changePassword}
-              className="w-full h-12 rounded-lg bg-secondary text-white font-semibold hover:opacity-90 transition"
-            >
-              Change Password
-            </button>
+          {/* OTP STEP */}
+          {step === "otp" && (
+            <div className="mt-8 space-y-4">
+              <input
+                type="text"
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:outline-none focus:ring-2 focus:ring-accent"
+              />
 
-            <button
-              onClick={() => setStep("email")}
-              className="w-full text-sm text-gray-600 hover:text-secondary transition"
-            >
-              ← Back to email
-            </button>
-          </div>
-        )}
+              <input
+                type="password"
+                placeholder="New password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:outline-none focus:ring-2 focus:ring-accent"
+              />
+
+              <input
+                type="password"
+                placeholder="Confirm new password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:outline-none focus:ring-2 focus:ring-accent"
+              />
+
+              <button
+                onClick={changePassword}
+                className="w-full h-12 rounded-lg bg-secondary text-white font-semibold hover:opacity-90 transition"
+              >
+                Change Password
+              </button>
+
+              <button
+                onClick={() => setStep("email")}
+                className="w-full text-sm text-gray-600 hover:text-secondary transition"
+              >
+                ← Back to email
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
