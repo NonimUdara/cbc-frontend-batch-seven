@@ -1,4 +1,3 @@
-// Header.jsx
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { BsCart3 } from "react-icons/bs";
@@ -25,6 +24,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-primary/95 backdrop-blur-md border-b border-border">
       <div className="max-w-7xl mx-auto h-[80px] px-6 flex items-center justify-between">
+        
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <img

@@ -180,7 +180,7 @@ export default function ProductPageView() {
   );
 }
 
-/* ---------------- Helper Components ---------------- */
+/* Helper Components */
 
 function CategorySection({ title, desc, products }) {
   return (

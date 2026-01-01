@@ -141,7 +141,7 @@ export default function AdminPage() {
   const [userLoaded, setUserLoaded] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  /* ---------------- AUTH CHECK ---------------- */
+  /* Auth Check */
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -170,14 +170,14 @@ export default function AdminPage() {
       });
   }, []);
 
-  /* ---------------- LOGOUT ---------------- */
+  /* Logout */
   const handleLogout = () => {
     localStorage.removeItem("token");
     toast.success("Logged out successfully");
     navigate("/login");
   };
 
-  /* ---------------- SIDEBAR MENU ---------------- */
+  /* Sidebar Menu */
   const SidebarMenu = () => (
     <nav className="flex flex-col gap-2 mt-4">
       <Link
@@ -224,7 +224,7 @@ export default function AdminPage() {
 
   return (
     <div className="h-screen w-full flex flex-col md:flex-row bg-primary text-secondary overflow-hidden">
-      {/* ---------------- MOBILE TOPBAR ---------------- */}
+      {/* Mobile Topbar */}
       <div className="md:hidden flex items-center justify-between p-4 bg-accent text-white shadow-md">
         <span className="font-bold text-lg">Admin Dashboard</span>
         <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
@@ -232,14 +232,14 @@ export default function AdminPage() {
         </button>
       </div>
 
-      {/* ---------------- MOBILE SIDEBAR ---------------- */}
+      {/* Mobile Sidebar */}
       {isSidebarOpen && (
         <div className="md:hidden bg-primary text-secondary w-full p-4 border-b border-accent/30">
           <SidebarMenu />
         </div>
       )}
 
-      {/* ---------------- SIDEBAR (PC) ---------------- */}
+      {/* Sidebar */}
       <aside className="hidden md:flex flex-col w-72 h-full p-4 gap-4 border-r border-accent/30 bg-primary">
         <div className="bg-accent rounded-2xl p-4 flex flex-col items-center shadow-lg">
           <span className="text-white text-xl font-bold">
@@ -250,7 +250,7 @@ export default function AdminPage() {
         <SidebarMenu />
       </aside>
 
-      {/* ---------------- RIGHT CONTENT ---------------- */}
+      {/* Right Content */}
       <main className="flex-1 h-full overflow-hidden p-4 md:p-6">
         <div className="bg-white rounded-2xl shadow-xl h-full overflow-y-auto p-6">
           {!userLoaded ? (

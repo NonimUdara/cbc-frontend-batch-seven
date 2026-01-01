@@ -61,7 +61,7 @@ export default function AdminDashboardPage() {
     fetchData();
   }, [fetchData]);
 
-  // ---------------- CHART DATA ----------------
+  // Prepare data for charts
   const ordersChartData = orders.map((order) => ({
     date: new Date(order.date).toLocaleDateString("en-GB"),
     total: order.total,
@@ -87,7 +87,7 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="w-full h-full p-6 flex flex-col gap-6 overflow-auto">
-      {/* ---------------- SUMMARY CARDS ---------------- */}
+      {/* Cards */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         <motion.div whileHover={{ scale: 1.05 }} className="bg-gradient-to-r from-orange-400 to-orange-300 shadow-lg rounded-xl p-6 flex items-center gap-4 text-white">
           <FaShoppingCart size={36} />
@@ -130,7 +130,7 @@ export default function AdminDashboardPage() {
         </motion.div>
       </div>
 
-      {/* ---------------- CHARTS ---------------- */}
+      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Orders Chart */}
         <div className="bg-white shadow-lg rounded-xl p-6">
@@ -167,7 +167,7 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* ---------------- RECENT TABLES ---------------- */}
+      {/* Tables */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Orders */}
         <div className="bg-white shadow-lg rounded-xl p-6 overflow-auto">

@@ -17,7 +17,7 @@ export default function UserSettings() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
-  /* ---------------- FETCH USER ---------------- */
+  /* Fetch User */
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -39,7 +39,7 @@ export default function UserSettings() {
       });
   }, []);
 
-  /* ---------------- UPDATE PROFILE ---------------- */
+  /* Update Profile */
   async function updateUserData(e) {
     e.preventDefault();
 
@@ -75,7 +75,7 @@ export default function UserSettings() {
     }
   }
 
-  /* ---------------- UPDATE PASSWORD ---------------- */
+  /* Update Password */
   async function updatePassword(e) {
     e.preventDefault();
 
@@ -101,7 +101,7 @@ export default function UserSettings() {
     }
   }
 
-  /* ---------------- IMAGE PREVIEW ---------------- */
+  /* Image Preview */
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -124,7 +124,7 @@ export default function UserSettings() {
         </button>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* PROFILE CARD */}
+          {/* Profile Card */}
           <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8">
             <h2 className="text-2xl font-bold text-secondary text-center mb-6">
               Profile Settings
@@ -180,7 +180,7 @@ export default function UserSettings() {
             </form>
           </div>
 
-          {/* PASSWORD CARD */}
+          {/* Password Card */}
           <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 flex flex-col justify-center">
             <h2 className="text-2xl font-bold text-secondary text-center mb-6">
               Change Password

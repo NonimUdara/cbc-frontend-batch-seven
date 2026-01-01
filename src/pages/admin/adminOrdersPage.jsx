@@ -13,7 +13,7 @@ export default function AdminOrdersPage() {
 
   const navigate = useNavigate();
 
-  /* ---------------- FETCH ORDERS FUNCTION ---------------- */
+  /* Fetch Orders */
   const fetchOrders = useCallback(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -38,7 +38,7 @@ export default function AdminOrdersPage() {
       });
   }, [navigate]);
 
-  /* ---------------- INITIAL LOAD ---------------- */
+  /* Initial Load */
   useEffect(() => {
     fetchOrders();
   }, [fetchOrders]);
@@ -67,7 +67,7 @@ export default function AdminOrdersPage() {
         </div>
       </div>
 
-      {/* CONTENT AREA (SCROLL ENABLED HERE) */}
+      {/* Content Area (Scroll Enabled) */}
       <div className="flex-1 overflow-y-auto pr-1">
         {/* LOADER */}
         {isLoading && (
@@ -76,7 +76,7 @@ export default function AdminOrdersPage() {
           </div>
         )}
 
-        {/* ---------------- DESKTOP TABLE ---------------- */}
+        {/* Desktop Table */}
         {!isLoading && (
           <div className="hidden lg:block bg-white rounded-xl shadow-lg border overflow-hidden">
             <div className="overflow-x-auto">
@@ -147,7 +147,7 @@ export default function AdminOrdersPage() {
           </div>
         )}
 
-        {/* ---------------- MOBILE CARDS ---------------- */}
+        {/* Mobile Cards */}
         {!isLoading && (
           <div className="grid grid-cols-1 gap-4 lg:hidden">
             {orders.map((order, index) => (

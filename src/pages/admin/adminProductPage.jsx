@@ -35,7 +35,7 @@ export default function AdminProductPage() {
 
   return (
     <>
-      {/* ---------------- DELETE CONFIRM POPUP ---------------- */}
+      {/* Delete Confirm Popup */}
       {isDeleteConfirmVisible && (
         <div className="fixed left-0 top-0 w-full h-screen bg-[#00000050] z-[100] flex justify-center items-center">
           <div className="w-[500px] h-[200px] bg-white rounded-lg shadow-lg p-6 relative flex flex-col justify-center items-center gap-[10px]">
@@ -81,9 +81,9 @@ export default function AdminProductPage() {
         </div>
       )}
 
-      {/* ---------------- MAIN CONTAINER ---------------- */}
+      {/* Main Container */}
       <div className="w-full h-full flex flex-col gap-6 overflow-hidden">
-        {/* ---------------- ADD PRODUCT BUTTON ---------------- */}
+        {/* Add Product Button */}
         <Link
           to="/admin/add-product"
           className="fixed bottom-8 right-8 text-5xl text-secondary hover:text-accent transition z-50"
@@ -91,7 +91,7 @@ export default function AdminProductPage() {
           <CiCirclePlus />
         </Link>
 
-        {/* ---------------- HEADER ---------------- */}
+        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <h1 className="text-2xl font-bold text-secondary">Products Management</h1>
           <div className="bg-primary px-4 py-1 rounded-full text-sm">
@@ -100,7 +100,7 @@ export default function AdminProductPage() {
           </div>
         </div>
 
-        {/* ---------------- CONTENT AREA (SCROLLABLE) ---------------- */}
+        {/* Content Area (Scroll Enabled) */}
         <div className="flex-1 overflow-y-auto pr-1">
           {/* LOADER */}
           {isLoading && (
@@ -109,7 +109,7 @@ export default function AdminProductPage() {
             </div>
           )}
 
-          {/* ---------------- DESKTOP TABLE ---------------- */}
+          {/* Desktop Table */}
           {!isLoading && (
             <div className="hidden lg:block bg-white rounded-xl shadow-lg border overflow-hidden">
               <div className="overflow-x-auto">
@@ -183,7 +183,7 @@ export default function AdminProductPage() {
             </div>
           )}
 
-          {/* ---------------- MOBILE CARDS ---------------- */}
+          {/* Mobile Cards */}
           {!isLoading && (
             <div className="grid grid-cols-1 gap-4 lg:hidden">
               {products.map((item, index) => (

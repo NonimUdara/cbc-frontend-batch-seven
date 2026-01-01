@@ -94,7 +94,7 @@ export default function AdminUsersPage() {
 
   return (
     <>
-      {/* ---------------- BLOCK CONFIRM POPUP ---------------- */}
+      {/* Block Confirm Popup */}
       {isBlockConfirmVisible && userToBlock && (
         <UserBlockConfirm
           user={userToBlock}
@@ -103,9 +103,9 @@ export default function AdminUsersPage() {
         />
       )}
 
-      {/* ---------------- MAIN CONTAINER ---------------- */}
+      {/* Main Container */}
       <div className="w-full h-full flex flex-col gap-6 overflow-hidden">
-        {/* ---------------- HEADER ---------------- */}
+        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <h1 className="text-2xl font-bold text-secondary">
             Users Management
@@ -116,7 +116,7 @@ export default function AdminUsersPage() {
           </div>
         </div>
 
-        {/* ---------------- CONTENT AREA ---------------- */}
+        {/* Content Area (Scroll Enabled) */}
         <div className="flex-1 overflow-auto">
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
@@ -206,7 +206,7 @@ export default function AdminUsersPage() {
                 </div>
               </div>
 
-              {/* ---------------- MOBILE CARDS ---------------- */}
+              {/* Mobile Cards */}
               <div className="grid grid-cols-1 gap-4 lg:hidden">
                 {users.map((user, idx) => (
                   <div
