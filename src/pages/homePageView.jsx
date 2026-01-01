@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader } from "../components/loader";
 import ProductCard from "../components/productCard";
+import Footer from "../components/footer";
 import {
   FaShippingFast,
   FaLeaf,
@@ -210,65 +211,8 @@ export default function HomePageView() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-secondary text-primary py-16 px-6 ">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 text-center md:text-left gap-12">
-          {/* About */}
-          <div className="flex flex-col items-center">
-            <h3 className="text-2xl font-bold mb-4">Crystal Beauty Clear</h3>
-            <p className="text-white/70 max-w-xs">
-              Premium skincare products designed to enhance your natural beauty.
-            </p>
-          </div>
-
-          {/* Quick Links */}
-          <div className="flex flex-col items-center">
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              <li>
-                <a href="/" className="hover:text-accent transition">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="/products" className="hover:text-accent transition">
-                  Products
-                </a>
-              </li>
-              <li>
-                <a href="/about" className="hover:text-accent transition">
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="/contact" className="hover:text-accent transition">
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Social */}
-          <div className="flex flex-col items-center">
-            <h4 className="font-semibold mb-4">Follow Us</h4>
-            <div className="flex gap-4 text-xl justify-center md:justify-start">
-              <a href="#" className="hover:text-accent transition">
-                <FaInstagram />
-              </a>
-              <a href="#" className="hover:text-accent transition">
-                <FaFacebookF />
-              </a>
-              <a href="#" className="hover:text-accent transition">
-                <FaTwitter />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <p className="text-center text-white/60 mt-10 text-sm">
-          &copy; {new Date().getFullYear()} Crystal Beauty Clear. All rights
-          reserved.
-        </p>
-      </footer>
+      <Footer />
+      
     </div>
   );
 }

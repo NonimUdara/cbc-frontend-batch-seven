@@ -8,6 +8,7 @@ import {
   FaFacebookF,
   FaTwitter,
 } from "react-icons/fa";
+import Footer from "../components/footer";
 
 export default function CartPage() {
   const [cart, setCart] = useState(loadCart());
@@ -128,41 +129,7 @@ export default function CartPage() {
       </div>
 
       {/* FOOTER */}
-      <footer className="bg-secondary text-primary py-16 px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
-          <div className="flex flex-col items-center">
-            <h3 className="text-2xl font-bold mb-4">
-              Crystal Beauty Clear
-            </h3>
-            <p className="text-white/70 max-w-xs">
-              Premium skincare products designed to enhance your natural beauty.
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center">
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              <li><Link to="/" className="hover:text-accent">Home</Link></li>
-              <li><Link to="/products" className="hover:text-accent">Products</Link></li>
-              <li><Link to="/about" className="hover:text-accent">About</Link></li>
-              <li><Link to="/contact" className="hover:text-accent">Contact</Link></li>
-            </ul>
-          </div>
-
-          <div className="flex flex-col items-center">
-            <h4 className="font-semibold mb-4">Follow Us</h4>
-            <div className="flex gap-4 text-xl">
-              <FaInstagram className="hover:text-accent cursor-pointer" />
-              <FaFacebookF className="hover:text-accent cursor-pointer" />
-              <FaTwitter className="hover:text-accent cursor-pointer" />
-            </div>
-          </div>
-        </div>
-
-        <p className="text-center text-white/60 mt-10 text-sm">
-          &copy; {new Date().getFullYear()} Crystal Beauty Clear. All rights reserved.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }
