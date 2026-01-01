@@ -44,7 +44,7 @@ export default function LoginPage() {
       else navigate("/");
     } catch (e) {
       console.error("Login failed:", e);
-      toast.error("Login failed. Please check your credentials.");
+      toast.error(e.response?.data?.message || "Login failed");
     }
   }
 
