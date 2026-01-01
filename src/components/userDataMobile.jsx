@@ -86,9 +86,9 @@ export default function UserMobileData() {
                 window.location.href = "/settings";
               }
 
-              // if (value === "orders") {
-              //   window.location.href = "/orders";
-              // }
+              if (value === "orders") {
+                window.location.href = "/orders";
+              }
 
               if (value === "logout") {
                 setIsLogoutConfirmOpen(true);
@@ -101,7 +101,7 @@ export default function UserMobileData() {
               Settings
             </option>
             <option value="account" >Account </option>
-            {/* <option value="orders">Orders</option> */}
+            <option value="orders">Orders</option>
             <option value="logout">Logout</option>
           </select>
         </div>
