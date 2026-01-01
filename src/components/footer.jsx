@@ -53,13 +53,13 @@ export default function Footer() {
           <div className="flex flex-col items-center gap-4">
             <h4 className="font-semibold text-lg">Follow Us</h4>
             <div className="flex gap-5 text-xl">
-              <a href="#" className="hover:text-accent transition">
+              <a href="https://www.instagram.com" className="hover:text-accent transition">
                 <FaInstagram />
               </a>
-              <a href="#" className="hover:text-accent transition">
+              <a href="https://www.facebook.com" className="hover:text-accent transition">
                 <FaFacebookF />
               </a>
-              <a href="#" className="hover:text-accent transition">
+              <a href="https://www.twitter.com" className="hover:text-accent transition">
                 <FaTwitter />
               </a>
             </div>
