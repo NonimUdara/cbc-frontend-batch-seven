@@ -18,6 +18,7 @@ export default function LoginPage() {
         })
         .then((res) => {
           localStorage.setItem("token", res.data.token);
+          toast.success("Login successful via Google!");
           const user = res.data.user;
           if (user.role === "admin") navigate("/admin");
           else navigate("/");
