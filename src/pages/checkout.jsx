@@ -1,209 +1,19 @@
-// import { CiCircleChevDown, CiCircleChevUp } from "react-icons/ci";
-// import { BiTrash } from "react-icons/bi";
-// import { useState } from "react";
-// import { Link, useLocation, useNavigate } from "react-router-dom";
-// import toast from "react-hot-toast";
-// import axios from "axios";
-
-// export default function CheckoutPage() {
-//   const location = useLocation();
-//   const [cart, setCart] = useState(location.state);
-//   const navigate = useNavigate();
-//   const [address, setAddress] = useState("");
-//   const [name, setName] = useState("");
-
-//   function getTotal() {
-//     let total = 0;
-//     cart.forEach((item) => {
-//       total += item.price * item.quantity;
-//     });
-//     return total;
-//   }
-
-//   async function purchaseCart() {
-//     const token = localStorage.getItem("token");
-//     if (token == null) {
-//       toast.error("You must be logged in to add a product.");
-//       navigate("/login");
-//       return;
-//     }
-
-//     try {
-//       const items = [];
-
-//       for (let i = 0; i < cart.length; i++) {
-//         items.push({
-//           productID: cart[i].productID,
-//           quantity: cart[i].quantity,
-//         });
-//       }
-
-//       await axios.post(
-//         import.meta.env.VITE_API_URL + "/api/orders",
-//         {
-//           address: address,
-//           customerName: name==""?null:name,
-//           items: items,
-//         },
-//         {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         }
-//       );
-
-//       toast.success("Order placed successfully");
-//     } catch (error) {
-//       toast.error("Error placing order");
-//       console.log(error);
-//       if (error.response && error.response.status == 400) {
-//         toast.error(error.response.data.message);
-//       }
-//     }
-//   }
-
-//   return (
-//     <div className="w-full lg:h-[calc(100vh-100px)] overflow-y-scroll bg-primary text-secondary flex flex-col pt-[25px] items-center">
-//       <div className="w-[400px] h-full lg:w-[600px] flex flex-col gap-4">
-//         {cart.map((item, index) => (
-//           <div
-//             key={index}
-//             className="w-full h-[300px] lg:h-[120px] bg-white flex flex-col lg:flex-row relative items-center p-3 lg:p-0"
-//           >
-//             <button
-//               className="absolute text-red-500 right-[-40px] font-bold text-2xl rounded-full aspect-square hover:bg-red-500 hover:text-white p-[5px]"
-//               onClick={() => {
-//                 const newCart = [...cart];
-//                 newCart.splice(index, 1);
-//                 setCart(newCart);
-//               }}
-//             >
-//               <BiTrash />
-//             </button>
-
-//             <img
-//               src={item.image}
-//               alt=""
-//               className="h-[100px] lg:h-full aspect-square object-cover"
-//             />
-
-//             <div className="w-[200px] h-[100px] lg:h-full flex flex-col pl-[5px] pt-[10px]">
-//               <h1 className="w-full lg:w-[200px] text-center text-wrap text-xl font-semibold text-secondary">
-//                 {item.name}
-//               </h1>
-//               <p className="text-sm text-secondary/70 text-center lg:text-left">
-//                 {item.productID}
-//               </p>
-//             </div>
-
-//             <div className="w-[100px] h-full flex flex-row lg:flex-col items-center justify-center">
-//               <CiCircleChevUp
-//                 className="text-3xl"
-//                 onClick={() => {
-//                   const newCart = [...cart];
-//                   newCart[index].quantity += 1;
-//                   setCart(newCart);
-//                 }}
-//               />
-//               <span className="text-2xl font-semibold">{item.quantity}</span>
-//               <CiCircleChevDown
-//                 className="text-3xl"
-//                 onClick={() => {
-//                   const newCart = [...cart];
-//                   if (newCart[index].quantity > 1) {
-//                     newCart[index].quantity -= 1;
-//                     setCart(newCart);
-//                   }
-//                 }}
-//               />
-//             </div>
-
-//             <div className="w-full lg:w-[180px] lg:h-full flex flex-row lg:flex-col items-center justify-center">
-//               {item.labledPrice > item.price && (
-//                 <span className="text-xl font-semibold lg:w-full line-through text-center lg:text-right pr-[10px]">
-//                   LKR {(item.labledPrice * item.quantity).toFixed(2)}
-//                 </span>
-//               )}
-//               <span className="text-2xl text-accent font-semibold lg:w-full text-center lg:text-right pr-[10px]">
-//                 LKR {(item.price * item.quantity).toFixed(2)}
-//               </span>
-//             </div>
-//           </div>
-//         ))}
-
-//         <div className="w-full h-[120px] bg-white flex flex-col-reverse lg:flex-row justify-end items-center relative">
-//           <div className="w-full h-full flex-row lg:flex justify-between items-center p-4 ">
-//             <label
-//               htmlFor="name"
-//               className="text-sm text-secondary mr-2"
-//             >
-//               Name:
-//             </label>
-//             <input
-//               type="text"
-//               id="name"
-//               className="w-[370px] h-[50px] border border-secondary/50 text-center rounded-md px-3"
-//               value={name}
-//               onChange={(e) => setName(e.target.value)}
-//             />
-//           </div>
-//         </div>
-
-//         <div className="w-full h-[200px] bg-white flex flex-col-reverse lg:flex-row justify-end items-center relative">
-//           <div className="w-full h-full flex-row lg:flex justify-between items-center p-4 ">
-//             <label
-//               htmlFor="address"
-//               className="text-sm text-secondary mr-2"
-//             >
-//               Shipping Address:
-//             </label>
-//             <input
-//               type="text"
-//               id="address"
-//               className="w-[370px] h-[120px] border border-secondary/50 text-center rounded-md px-3"
-//               value={address}
-//               onChange={(e) => setAddress(e.target.value)}
-//             />
-//           </div>
-//         </div>
-
-//         <div className="w-full h-[120px] bg-white flex flex-col-reverse lg:flex-row justify-end items-center relative">
-//           <button
-//             onClick={purchaseCart}
-//             className="lg:absolute left-0 bg-accent text-white px-6 py-3 lg:ml-[20px] font-semibold"
-//           >
-//             Order
-//           </button>
-//           <div className="h-[50px] text-center">
-//             <span className="text-2xl font-semibold w-full text-center lg:text-right lg:pr-[10px] text-accent">
-//               Total : LKR {getTotal().toFixed(2)}
-//             </span>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
 import { CiCircleChevDown, CiCircleChevUp } from "react-icons/ci";
 import { BiTrash } from "react-icons/bi";
 import { useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
-import {
-  FaInstagram,
-  FaFacebookF,
-  FaTwitter,
-} from "react-icons/fa";
 import Footer from "../components/footer";
 
 export default function CheckoutPage() {
   const location = useLocation();
   const navigate = useNavigate();
+
   const [cart, setCart] = useState(location.state || []);
   const [address, setAddress] = useState("");
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
 
   function getTotal() {
     return cart.reduce(
@@ -231,6 +41,16 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (!phone) {
+      toast.error("Please enter your phone number.");
+      return;
+    }
+
+    if (!/^\d{10}$/.test(phone)) {
+      toast.error("Phone number must be exactly 10 digits.");
+      return;
+    }
+
     try {
       const items = cart.map((item) => ({
         productID: item.productID,
@@ -242,6 +62,7 @@ export default function CheckoutPage() {
         {
           address,
           customerName: name || null,
+          phone,
           items,
         },
         {
@@ -262,12 +83,11 @@ export default function CheckoutPage() {
 
   return (
     <div className="w-full min-h-screen bg-primary text-secondary flex flex-col">
-
       {/* CONTENT */}
       <div className="flex-1 flex justify-center px-4 py-16">
         <div className="w-full max-w-4xl flex flex-col gap-8">
 
-          {/* EMPTY */}
+          {/* EMPTY CART */}
           {cart.length === 0 && (
             <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
               <h1 className="text-3xl font-bold mb-4">
@@ -285,7 +105,7 @@ export default function CheckoutPage() {
             </div>
           )}
 
-          {/* ITEMS */}
+          {/* CART ITEMS */}
           {cart.length > 0 && (
             <>
               {cart.map((item, index) => (
@@ -356,7 +176,7 @@ export default function CheckoutPage() {
                 </div>
               ))}
 
-              {/* CUSTOMER INFO */}
+              {/* CUSTOMER DETAILS */}
               <div className="bg-white rounded-2xl shadow-lg p-6 flex flex-col gap-4">
                 <h3 className="text-xl font-semibold">Customer Details</h3>
 
@@ -366,6 +186,20 @@ export default function CheckoutPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="h-12 border border-secondary/40 rounded-lg px-4"
+                />
+
+                <input
+                  type="tel"
+                  placeholder="Phone number (10 digits)"
+                  value={phone}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "");
+                    if (value.length <= 10) {
+                      setPhone(value);
+                    }
+                  }}
+                  className="h-12 border border-secondary/40 rounded-lg px-4"
+                  maxLength={10}
                 />
 
                 <textarea
@@ -394,10 +228,8 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      {/* Footer */}
+      {/* FOOTER */}
       <Footer />
     </div>
   );
 }
-
-
